@@ -1,0 +1,53 @@
+{% extends 'pages/base.html' %}
+{% load static %}
+
+{% block title %}Registro - Prestige{% endblock %}
+
+{% block content %}
+<section class="auth-section">
+    <div class="container">
+        <div class="auth-container">
+            <h1 class="auth-title">Crear Cuenta</h1>
+            <div class="title-separator"></div>
+            
+            <form method="post" class="auth-form">
+                {% csrf_token %}
+                
+                {% if form.errors %}
+                <div class="form-error">
+                    <p>Por favor corrige los siguientes errores:</p>
+                    {{ form.errors }}
+                </div>
+                {% endif %}
+                
+                <div class="form-group">
+                    <label for="{{ form.username.id_for_label }}">Nombre de usuario</label>
+                    {{ form.username }}
+                </div>
+                
+                <div class="form-group">
+                    <label for="{{ form.email.id_for_label }}">Email</label>
+                    {{ form.email }}
+                </div>
+                
+                <div class="form-group">
+                    <label for="{{ form.password1.id_for_label }}">Contraseña</label>
+                    {{ form.password1 }}
+                    <small class="form-text">{{ form.password1.help_text }}</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="{{ form.password2.id_for_label }}">Confirmar contraseña</label>
+                    {{ form.password2 }}
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-block">Registrarse</button>
+                
+                <div class="auth-links">
+                    <p>¿Ya tienes una cuenta? <a href="{% url 'login' %}">Iniciar sesión</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

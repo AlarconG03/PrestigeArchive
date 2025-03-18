@@ -1,0 +1,73 @@
+{% extends 'admin/base_admin.html' %}
+{% load static %}
+
+{% block title %}{% if product %}Editar Producto{% else %}Nuevo Producto{% endif %} - Administración Prestige{% endblock %}
+
+{% block admin_content %}
+<div class="admin-header">
+    <h1 class="admin-page-title">{% if product %}Editar Producto{% else %}Nuevo Producto{% endif %}</h1>
+    <a href="{% url 'admin_products' %}" class="btn btn-outline">
+        <i class="fas fa-arrow-left"></i> Volver a Productos
+    </a>
+</div>
+
+<div class="admin-card">
+    <div class="admin-card-body">
+        <form method="post" enctype="multipart/form-data" class="admin-form">
+            {% csrf_token %}
+            
+            <div class="form-row">
+                <div class="form-group form-group-lg">
+                    <label for="name">Nombre del Producto</label>
+                    <input type="text" id="name" name="name" class="form-control" value="{{ product.name|default:'' }}" required>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="category">Categoría</label>
+                    <select id="category" name="category" class="form-control" required>
+                        <option value="">Selecciona una categoría</option>
+                        <option value="Ropa de Mujer" {% if product.category == 'Ropa de Mujer' %}selected{% endif %}>Ropa de Mujer</option>
+                        <option value="Ropa de Hombre" {% if product.category == 'Ropa de Hombre' %}selected{% endif %}>Ropa de Hombre</option>
+                        <option value="Accesorios" {% if product.category == 'Accesorios' %}selected{% endif %}>Accesorios</option>
+                        <option value="Calzado" {% if product.category == 'Calzado' %}selected{% endif %}>Calzado</option>
+                        <option value="Bolsos" {% if product.category == 'Bolsos' %}selected{% endif %}>Bolsos</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="price">Precio (€)</label>
+                    <input type="number" id="price" name="price" class="form-control" value="{{ product.price|default:'' }}" step="0.01" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="stock">Stock</label>
+                    <input type="number" id="stock" name="stock" class="form-control" value="{{ product.stock|default:'' }}" min="0" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="description">Descripción</label>
+                <textarea id="description" name="description" class="form-control" rows="5" required>{{ product.description|default:'' }}</textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="image">Imagen del Producto</label>
+                {% if product.image %}
+                <div class="current-image">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image-preview">
+                    <p>Imagen actual. Sube una nueva para reemplazarla.</p>
+                </div>
+                {% endif %}
+                <input type="file" id="image" name="image" class="form-control-file" accept="image/*">
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    {% if product %}Actualizar Producto{% else %}Crear Producto{% endif %}
+                </button>
+                <a href="{% url 'admin_products' %}" class="btn btn-outline">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

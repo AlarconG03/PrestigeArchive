@@ -1,0 +1,190 @@
+{% extends 'admin/base_admin.html' %}
+{% load static %}
+
+{% block title %}Dashboard - Administración Prestige{% endblock %}
+
+{% block admin_content %}
+<div class="admin-header">
+    <h1 class="admin-page-title">Dashboard</h1>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon">
+            <i class="fas fa-users"></i>
+        </div>
+        <div class="stat-content">
+            <div class="stat-value">{{ total_users }}</div>
+            <div class="stat-label">Usuarios</div>
+        </div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-icon">
+            <i class="fas fa-box"></i>
+        </div>
+        <div class="stat-content">
+            <div class="stat-value">{{ total_products }}</div>
+            <div class="stat-label">Productos</div>
+        </div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-icon">
+            <i class="fas fa-shopping-cart"></i>
+        </div>
+        <div class="stat-content">
+            <div class="stat-value">{{ total_orders }}</div>
+            <div class="stat-label">Pedidos</div>
+        </div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-icon">
+            <i class="fas fa-euro-sign"></i>
+        </div>
+        <div class="stat-content">
+            <div class="stat-value">{{ total_revenue }} €</div>
+            <div class="stat-label">Ingresos</div>
+        </div>
+    </div>
+</div>
+
+<div class="admin-row">
+    <div class="admin-col">
+        <div class="admin-card">
+            <div class="admin-card-header">
+                <h2 class="admin-card-title">Ventas Diarias</h2>
+            </div>
+            <div class="admin-card-body">
+                <canvas id="dailySalesChart"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <div class="admin-col">
+        <div class="admin-card">
+            <div class="admin-card-header">
+                <h2 class="admin-card-title">Ventas Mensuales</h2>
+            </div>
+            <div class="admin-card-body">
+                <canvas id="monthlySalesChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="admin-row">
+    <div class="admin-col">
+        <div class="admin-card">
+            <div class="admin-card-header">
+                <h2 class="admin-card-title">Productos Más Vendidos</h2>
+            </div>
+            <div class="admin-card-body">
+                <div class="top-products-list">
+                    {% for product in top_products %}
+                    <div class="top-product-item">
+                        <div class="product-rank">{{ forloop.counter }}</div>
+                        <div class="product-info">
+                            <div class="product-name">{{ product.product__name }}</div>
+                            <div class="product-sold">{{ product.total_sold }} unidades vendidas</div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="empty-list">No hay datos disponibles</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="admin-col">
+        <div class="admin-card">
+            <div class="admin-card-header">
+                <h2 class="admin-card-title">Pedidos Recientes</h2>
+            </div>
+            <div class="admin-card-body">
+                <div class="recent-orders-list">
+                    {% for order in recent_orders %}
+                    <div class="recent-order-item">
+                        <div class="order-info">
+                            <div class="order-id">{{ order.order_id }}</div>
+                            <div class="order-date">{{ order.date|date:"d/m/Y" }}</div>
+                        </div>
+                        <div class="order-status">
+                            <span class="status-badge status-{{ order.status }}">{{ order.get_status_display }}</span>
+                        </div>
+                        <div class="order-amount">{{ order.payment.amount }} €</div>
+                        <div class="order-actions">
+                            <a href="{% url 'admin_order_detail' order_id=order.order_id %}" class="btn btn-sm btn-outline">Ver</a>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="empty-list">No hay pedidos recientes</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Convertir datos de Django a JSON para JavaScript
+        const dailySalesData = JSON.parse('{{ daily_sales_json|escapejs }}');
+        const monthlySalesData = JSON.parse('{{ monthly_sales_json|escapejs }}');
+        
+        // Datos para el gráfico de ventas diarias
+        const dailySalesCtx = document.getElementById('dailySalesChart').getContext('2d');
+        const dailySalesChart = new Chart(dailySalesCtx, {
+            type: 'line',
+            data: {
+                labels: dailySalesData.labels,
+                datasets: [{
+                    label: 'Ventas (€)',
+                    data: dailySalesData.values,
+                    backgroundColor: 'rgba(239, 184, 16, 0.2)',
+                    borderColor: 'rgba(239, 184, 16, 1)',
+                    borderWidth: 2,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+        
+        // Datos para el gráfico de ventas mensuales
+        const monthlySalesCtx = document.getElementById('monthlySalesChart').getContext('2d');
+        const monthlySalesChart = new Chart(monthlySalesCtx, {
+            type: 'bar',
+            data: {
+                labels: monthlySalesData.labels,
+                datasets: [{
+                    label: 'Ventas (€)',
+                    data: monthlySalesData.values,
+                    backgroundColor: 'rgba(168, 123, 5, 0.7)',
+                    borderColor: 'rgba(168, 123, 5, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

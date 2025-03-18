@@ -1,0 +1,89 @@
+{% extends 'pages/base.html' %}
+{% load static %}
+
+{% block title %}Pedido Confirmado - Prestige{% endblock %}
+
+{% block content %}
+<section class="order-confirmation-section">
+    <div class="container">
+        <div class="order-confirmation">
+            <div class="confirmation-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            
+            <h1 class="confirmation-title">¡Pedido Confirmado!</h1>
+            <p class="confirmation-message">Gracias por tu compra. Tu pedido ha sido procesado correctamente.</p>
+            
+            <div class="order-info">
+                <div class="order-info-item">
+                    <span class="info-label">Número de Pedido:</span>
+                    <span class="info-value">{{ order.order_id }}</span>
+                </div>
+                <div class="order-info-item">
+                    <span class="info-label">Fecha:</span>
+                    <span class="info-value">{{ order.date|date:"d/m/Y H:i" }}</span>
+                </div>
+                <div class="order-info-item">
+                    <span class="info-label">Total:</span>
+                    <span class="info-value">{{ order.payment.amount }} €</span>
+                </div>
+                <div class="order-info-item">
+                    <span class="info-label">Estado:</span>
+                    <span class="info-value">
+                        <span class="status-badge status-{{ order.status }}">{{ order.get_status_display }}</span>
+                    </span>
+                </div>
+            </div>
+            
+            <div class="order-summary">
+                <h2 class="summary-title">Resumen del Pedido</h2>
+                
+                <div class="order-items">
+                    {% for item in order_items %}
+                    <div class="order-item">
+                        <div class="item-image">
+                            <img src="{% if item.product.image %}{{ item.product.image.url }}{% else %}{% static 'img/producto-default.jpg' %}{% endif %}" alt="{{ item.product.name }}">
+                        </div>
+                        <div class="item-details">
+                            <h3 class="item-name">{{ item.product.name }}</h3>
+                            <div class="item-meta">
+                                <span class="item-price">{{ item.price }} €</span>
+                                <span class="item-quantity">x{{ item.quantity }}</span>
+                            </div>
+                        </div>
+                        <div class="item-subtotal">
+                            {{ item.subtotal }} €
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <div class="order-totals">
+                    <div class="total-row">
+                        <span>Subtotal</span>
+                        <span>{{ order.payment.amount }} €</span>
+                    </div>
+                    <div class="total-row">
+                        <span>Envío</span>
+                        <span>Gratis</span>
+                    </div>
+                    <div class="total-row total">
+                        <span>Total</span>
+                        <span>{{ order.payment.amount }} €</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="shipping-info">
+                <h2 class="summary-title">Información de Envío</h2>
+                <p>{{ order.shipping_address }}</p>
+            </div>
+            
+            <div class="confirmation-actions">
+                <a href="{% url 'order_detail' order_id=order.order_id %}" class="btn btn-primary">Ver Detalles del Pedido</a>
+                <a href="{% url 'products' %}" class="btn btn-outline">Continuar Comprando</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

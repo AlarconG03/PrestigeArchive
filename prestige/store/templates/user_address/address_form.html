@@ -1,0 +1,132 @@
+{% extends 'pages/base.html' %}
+{% load static %}
+
+{% block title %}{{ title }} - Prestige{% endblock %}
+
+{% block content %}
+<section class="profile-section">
+    <div class="container">
+        <h1 class="section-title">{{ title }}</h1>
+        <div class="title-separator"></div>
+        
+        <div class="profile-container">
+            <div class="profile-sidebar">
+                <div class="profile-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="profile-name">{{ user.get_full_name|default:user.username }}</div>
+                <div class="profile-email">{{ user.email }}</div>
+                
+                <div class="profile-menu">
+                    <a href="{% url 'profile' %}" class="profile-menu-item">
+                        <i class="fas fa-user"></i> Información Personal
+                    </a>
+                    <a href="{% url 'my_orders' %}" class="profile-menu-item">
+                        <i class="fas fa-shopping-bag"></i> Mis Pedidos
+                    </a>
+                    <a href="{% url 'favorites' %}" class="profile-menu-item">
+                        <i class="fas fa-heart"></i> Favoritos
+                    </a>
+                    <a href="{% url 'addresses' %}" class="profile-menu-item active">
+                        <i class="fas fa-map-marker-alt"></i> Direcciones
+                    </a>
+                    <a href="{% url 'logout' %}" class="profile-menu-item">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                    </a>
+                </div>
+            </div>
+            
+            <div class="profile-content">
+                <div class="profile-card">
+                    <div class="address-header">
+                        <h2 class="profile-card-title">{{ title }}</h2>
+                        <a href="{% url 'addresses' %}" class="btn btn-outline">
+                            <i class="fas fa-arrow-left"></i> Volver a Direcciones
+                        </a>
+                    </div>
+                    
+                    <form method="post" class="address-form">
+                        {% csrf_token %}
+                        
+                        <div class="form-group">
+                            <label for="{{ form.name.id_for_label }}">Nombre de la dirección</label>
+                            {{ form.name }}
+                            {% if form.name.errors %}
+                            <div class="form-error">{{ form.name.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="{{ form.address_line1.id_for_label }}">Dirección</label>
+                            {{ form.address_line1 }}
+                            {% if form.address_line1.errors %}
+                            <div class="form-error">{{ form.address_line1.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="{{ form.address_line2.id_for_label }}">Dirección (línea 2)</label>
+                            {{ form.address_line2 }}
+                            {% if form.address_line2.errors %}
+                            <div class="form-error">{{ form.address_line2.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.city.id_for_label }}">Ciudad</label>
+                                {{ form.city }}
+                                {% if form.city.errors %}
+                                <div class="form-error">{{ form.city.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="form-group">
+                                <label for="{{ form.state.id_for_label }}">Provincia/Estado</label>
+                                {{ form.state }}
+                                {% if form.state.errors %}
+                                <div class="form-error">{{ form.state.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.postal_code.id_for_label }}">Código Postal</label>
+                                {{ form.postal_code }}
+                                {% if form.postal_code.errors %}
+                                <div class="form-error">{{ form.postal_code.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="form-group">
+                                <label for="{{ form.country.id_for_label }}">País</label>
+                                {{ form.country }}
+                                {% if form.country.errors %}
+                                <div class="form-error">{{ form.country.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="{{ form.phone.id_for_label }}">Teléfono</label>
+                            {{ form.phone }}
+                            {% if form.phone.errors %}
+                            <div class="form-error">{{ form.phone.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="form-check">
+                            {{ form.is_default }}
+                            <label for="{{ form.is_default.id_for_label }}">Establecer como dirección predeterminada</label>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Guardar Dirección</button>
+                            <a href="{% url 'addresses' %}" class="btn btn-outline">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

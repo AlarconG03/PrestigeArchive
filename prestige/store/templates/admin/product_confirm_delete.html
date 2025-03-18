@@ -1,0 +1,46 @@
+{% extends 'admin/base_admin.html' %}
+{% load static %}
+
+{% block title %}Eliminar Producto - Administración Prestige{% endblock %}
+
+{% block admin_content %}
+<div class="admin-header">
+    <h1 class="admin-page-title">Eliminar Producto</h1>
+    <a href="{% url 'admin_products' %}" class="btn btn-outline">
+        <i class="fas fa-arrow-left"></i> Volver a Productos
+    </a>
+</div>
+
+<div class="admin-card">
+    <div class="admin-card-body">
+        <div class="delete-confirmation">
+            <div class="delete-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <h2 class="delete-title">¿Estás seguro?</h2>
+            <p class="delete-message">
+                Estás a punto de eliminar el producto <strong>"{{ product.name }}"</strong>. Esta acción no se puede deshacer.
+            </p>
+            
+            <div class="product-preview">
+                <div class="product-image-container">
+                    <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/producto-default.jpg' %}{% endif %}" alt="{{ product.name }}" class="product-image">
+                </div>
+                <div class="product-details">
+                    <h3 class="product-name">{{ product.name }}</h3>
+                    <p class="product-category">{{ product.category }}</p>
+                    <p class="product-price">{{ product.price }} €</p>
+                </div>
+            </div>
+            
+            <div class="delete-actions">
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Sí, Eliminar Producto</button>
+                    <a href="{% url 'admin_products' %}" class="btn btn-outline">No, Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

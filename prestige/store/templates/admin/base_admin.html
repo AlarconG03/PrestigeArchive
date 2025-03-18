@@ -1,0 +1,34 @@
+{% extends 'pages/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="admin-layout">
+    <div class="admin-sidebar">
+        <div class="admin-sidebar-header">
+            <h2 class="admin-title">Panel de Administración</h2>
+        </div>
+        
+        <nav class="admin-nav">
+            <a href="{% url 'admin_dashboard' %}" class="admin-nav-item {% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+            <a href="{% url 'admin_products' %}" class="admin-nav-item {% if 'admin_product' in request.resolver_match.url_name %}active{% endif %}">
+                <i class="fas fa-box"></i> Productos
+            </a>
+            <a href="{% url 'admin_orders' %}" class="admin-nav-item {% if 'admin_order' in request.resolver_match.url_name %}active{% endif %}">
+                <i class="fas fa-shopping-cart"></i> Pedidos
+            </a>
+            <a href="{% url 'admin_users' %}" class="admin-nav-item {% if request.resolver_match.url_name == 'admin_users' %}active{% endif %}">
+                <i class="fas fa-users"></i> Usuarios
+            </a>
+            <a href="{% url 'home' %}" class="admin-nav-item">
+                <i class="fas fa-home"></i> Volver a la Tienda
+            </a>
+        </nav>
+    </div>
+    
+    <div class="admin-content">
+        {% block admin_content %}{% endblock %}
+    </div>
+</div>
+{% endblock %}

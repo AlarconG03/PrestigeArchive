@@ -1,0 +1,183 @@
+{% extends 'pages/base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block title %}Checkout - Prestige{% endblock %}
+
+{% block content %}
+<section class="checkout-section">
+    <div class="container">
+        <h1 class="section-title">Checkout</h1>
+        <div class="title-separator"></div>
+        
+        <form method="post" action="{% url 'create_order' %}" class="checkout-form">
+            {% csrf_token %}
+            
+            <div class="checkout-container">
+                <div class="checkout-details">
+                    <div class="checkout-card">
+                        <h2 class="checkout-card-title">Dirección de Envío</h2>
+                        
+                        {% if addresses %}
+                        <div class="address-selection">
+                            {% for address in addresses %}
+                            <div class="address-option">
+                                <input type="radio" id="address-{{ address.id }}" name="address_id" value="{{ address.id }}" {% if address.is_default %}checked{% endif %} required>
+                                <label for="address-{{ address.id }}" class="address-label">
+                                    <div class="address-label-header">
+                                        <span class="address-name">{{ address.name }}</span>
+                                        {% if address.is_default %}
+                                        <span class="default-badge">Predeterminada</span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="address-details">
+                                        <p>{{ address.address_line1 }}</p>
+                                        {% if address.address_line2 %}
+                                        <p>{{ address.address_line2 }}</p>
+                                        {% endif %}
+                                        <p>{{ address.city }}, {{ address.state }}, {{ address.postal_code }}</p>
+                                        <p>{{ address.country }}</p>
+                                        <p>Teléfono: {{ address.phone }}</p>
+                                    </div>
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="address-actions">
+                            <a href="{% url 'address_add' %}" class="btn btn-outline btn-sm">
+                                <i class="fas fa-plus"></i> Añadir Nueva Dirección
+                            </a>
+                        </div>
+                        {% else %}
+                        <div class="empty-addresses">
+                            <p>No tienes direcciones guardadas.</p>
+                            <a href="{% url 'address_add' %}" class="btn btn-primary">Añadir Dirección</a>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="checkout-card">
+                        <h2 class="checkout-card-title">Método de Pago</h2>
+                        
+                        <div class="payment-methods">
+                            <div class="payment-option">
+                                <input type="radio" id="payment-card" name="payment_method" value="Tarjeta de Crédito" checked required>
+                                <label for="payment-card" class="payment-label">
+                                    <i class="fas fa-credit-card"></i>
+                                    <span>Tarjeta de Crédito</span>
+                                </label>
+                            </div>
+                            
+                            <div class="payment-option">
+                                <input type="radio" id="payment-paypal" name="payment_method" value="PayPal" required>
+                                <label for="payment-paypal" class="payment-label">
+                                    <i class="fab fa-paypal"></i>
+                                    <span>PayPal</span>
+                                </label>
+                            </div>
+                            
+                            <div class="payment-option">
+                                <input type="radio" id="payment-transfer" name="payment_method" value="Transferencia Bancaria" required>
+                                <label for="payment-transfer" class="payment-label">
+                                    <i class="fas fa-university"></i>
+                                    <span>Transferencia Bancaria</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="payment-details" id="card-details">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="card-number">Número de Tarjeta</label>
+                                    <input type="text" id="card-number" class="form-control" placeholder="1234 5678 9012 3456">
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="card-name">Nombre en la Tarjeta</label>
+                                    <input type="text" id="card-name" class="form-control" placeholder="John Doe">
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="card-expiry">Fecha de Expiración</label>
+                                    <input type="text" id="card-expiry" class="form-control" placeholder="MM/AA">
+                                </div>
+                                <div class="form-group">
+                                    <label for="card-cvc">CVC</label>
+                                    <input type="text" id="card-cvc" class="form-control" placeholder="123">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="checkout-summary">
+                    <div class="checkout-card">
+                        <h2 class="checkout-card-title">Resumen del Pedido</h2>
+                        
+                        <div class="checkout-items">
+                            {% for item in cart_items %}
+                            <div class="checkout-item">
+                                <div class="checkout-item-image">
+                                    <img src="{% if item.product.image %}{{ item.product.image.url }}{% else %}{% static 'img/producto-default.jpg' %}{% endif %}" alt="{{ item.product.name }}">
+                                    <span class="checkout-item-quantity">{{ item.quantity }}</span>
+                                </div>
+                                <div class="checkout-item-details">
+                                    <h3 class="checkout-item-name">{{ item.product.name }}</h3>
+                                    <div class="checkout-item-price">{{ item.product.price }} €</div>
+                                </div>
+                                <div class="checkout-item-subtotal">
+                                    {{ item.product.price|floatformat:2|mul:item.quantity }} €
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="checkout-totals">
+                            <div class="checkout-total-row">
+                                <span>Subtotal</span>
+                                <span>{{ total }} €</span>
+                            </div>
+                            <div class="checkout-total-row">
+                                <span>Envío</span>
+                                <span>Gratis</span>
+                            </div>
+                            <div class="checkout-total-row total">
+                                <span>Total</span>
+                                <span>{{ total }} €</span>
+                            </div>
+                        </div>
+                        
+                        <div class="checkout-actions">
+                            <button type="submit" class="btn btn-primary btn-block">Completar Pedido</button>
+                            <a href="{% url 'cart' %}" class="btn btn-outline btn-block">Volver al Carrito</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Mostrar/ocultar detalles de pago según el método seleccionado
+        const paymentMethods = document.querySelectorAll('input[name="payment_method"]');
+        const cardDetails = document.getElementById('card-details');
+        
+        paymentMethods.forEach(method => {
+            method.addEventListener('change', function() {
+                if (this.id === 'payment-card') {
+                    cardDetails.style.display = 'block';
+                } else {
+                    cardDetails.style.display = 'none';
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

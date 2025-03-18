@@ -1,0 +1,94 @@
+{% extends 'pages/base.html' %}
+{% load static %}
+
+{% block title %}Mis Favoritos - Prestige{% endblock %}
+
+{% block content %}
+<section class="profile-section">
+    <div class="container">
+        <h1 class="section-title">Mis Favoritos</h1>
+        <div class="title-separator"></div>
+        
+        <div class="profile-container">
+            <div class="profile-sidebar">
+                <div class="profile-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="profile-name">{{ user.get_full_name|default:user.username }}</div>
+                <div class="profile-email">{{ user.email }}</div>
+                
+                <div class="profile-menu">
+                    <a href="{% url 'profile' %}" class="profile-menu-item">
+                        <i class="fas fa-user"></i> Información Personal
+                    </a>
+                    <a href="{% url 'my_orders' %}" class="profile-menu-item">
+                        <i class="fas fa-shopping-bag"></i> Mis Pedidos
+                    </a>
+                    <a href="{% url 'favorites' %}" class="profile-menu-item active">
+                        <i class="fas fa-heart"></i> Favoritos
+                    </a>
+                    <a href="{% url 'addresses' %}" class="profile-menu-item">
+                        <i class="fas fa-map-marker-alt"></i> Direcciones
+                    </a>
+                    <a href="{% url 'logout' %}" class="profile-menu-item">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                    </a>
+                </div>
+            </div>
+            
+            <div class="profile-content">
+                <div class="profile-card">
+                    <h2 class="profile-card-title">Productos Favoritos</h2>
+                    
+                    {% if favorites %}
+                    <div class="favorites-grid">
+                        {% for favorite in favorites %}
+                        <div class="favorite-item">
+                            <div class="favorite-image">
+                                <a href="{% url 'product_detail' favorite.product.id %}">
+                                    <img src="{% if favorite.product.image %}{{ favorite.product.image.url }}{% else %}{% static 'img/producto-default.jpg' %}{% endif %}" alt="{{ favorite.product.name }}">
+                                </a>
+                            </div>
+                            <div class="favorite-details">
+                                <h3 class="favorite-name">
+                                    <a href="{% url 'product_detail' favorite.product.id %}">{{ favorite.product.name }}</a>
+                                </h3>
+                                <div class="favorite-category">{{ favorite.product.category }}</div>
+                                <div class="favorite-price">{{ favorite.product.price }} €</div>
+                                <div class="favorite-actions">
+                                    <form method="post" action="{% url 'cart_add' %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="product_id" value="{{ favorite.product.id }}">
+                                        <input type="hidden" name="quantity" value="1">
+                                        <button type="submit" class="btn btn-sm btn-primary">
+                                            <i class="fas fa-shopping-cart"></i> Añadir al Carrito
+                                        </button>
+                                    </form>
+                                    <form method="post" action="{% url 'favorite_toggle' %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="product_id" value="{{ favorite.product.id }}">
+                                        <button type="submit" class="btn btn-sm btn-outline">
+                                            <i class="fas fa-trash"></i> Eliminar
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="empty-favorites">
+                        <div class="empty-icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <h3>No tienes favoritos</h3>
+                        <p>Añade productos a tus favoritos para verlos aquí.</p>
+                        <a href="{% url 'products' %}" class="btn btn-primary">Explorar Productos</a>
+                    </div >
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
