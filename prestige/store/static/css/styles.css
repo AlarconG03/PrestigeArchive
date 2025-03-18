@@ -142,6 +142,21 @@ button {
     margin-right: 0.5rem;
 }
 
+.btn-view-details {
+    background-color: var(--color-brown);
+    color: var(--color-white);
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+}
+
+.btn-view-details:hover {
+    background-color: var(--color-brown-dark);
+}
+
+.btn-view-details i {
+    margin-right: 0.5rem;
+}
+
 /* Navbar */
 .navbar {
     position: sticky;

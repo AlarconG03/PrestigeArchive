@@ -6,8 +6,8 @@ User = get_user_model()
 
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField(required=True)
-    first_name = forms.CharField(required=True, label='Nombre')
-    last_name = forms.CharField(required=True, label='Apellido')
+    #first_name = forms.CharField(required=True, label='Nombre')
+    #last_name = forms.CharField(required=True, label='Apellido')
     
     class Meta:
         model = User
