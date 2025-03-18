@@ -1,0 +1,67 @@
+{% extends 'admin/base_admin.html' %}
+{% load static %}
+
+{% block title %}Productos - Administración Prestige{% endblock %}
+
+{% block admin_content %}
+<div class="admin-header">
+    <h1 class="admin-page-title">Productos</h1>
+    <a href="{% url 'admin_product_create' %}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Nuevo Producto
+    </a>
+</div>
+
+<div class="admin-card">
+    <div class="admin-card-body">
+        <div class="admin-table-responsive">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Imagen</th>
+                        <th>Nombre</th>
+                        <th>Categoría</th>
+                        <th>Precio</th>
+                        <th>Stock</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                    <tr>
+                        <td>{{ product.id }}</td>
+                        <td>
+                            <div class="product-image-small">
+                                <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/producto-default.jpg' %}{% endif %}" alt="{{ product.name }}">
+                            </div>
+                        </td>
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.category }}</td>
+                        <td>{{ product.price }} €</td>
+                        <td>
+                            <span class="stock-badge {% if product.stock < 5 %}stock-low{% elif product.stock > 20 %}stock-high{% else %}stock-medium{% endif %}">
+                                {{ product.stock }}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="table-actions">
+                                <a href="{% url 'admin_product_edit' product_id=product.id %}" class="btn btn-sm btn-outline">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="{% url 'admin_product_delete' product_id=product.id %}" class="btn btn-sm btn-danger">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="empty-table">No hay productos disponibles</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,151 @@
+{% extends 'pages/base.html' %}
+{% load static %}
+
+{% block title %}{{ product.name }} - Prestige{% endblock %}
+
+{% block content %}
+<section class="product-detail-section">
+    <div class="container">
+        <div class="product-detail">
+            <div class="product-detail-image">
+                <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/producto-default.jpg' %}{% endif %}" alt="{{ product.name }}" class="product-image">
+            </div>
+            
+            <div class="product-detail-content">
+                <h1 class="product-detail-title">{{ product.name }}</h1>
+                <div class="product-detail-category">{{ product.category }}</div>
+                <div class="product-detail-price">{{ product.price }} €</div>
+                
+                <div class="product-detail-description">
+                    <p>{{ product.description }}</p>
+                </div>
+                
+                <div class="product-detail-stock">
+                    {% if product.stock > 0 %}
+                    <span class="stock-badge in-stock">En Stock ({{ product.stock }})</span>
+                    {% else %}
+                    <span class="stock-badge out-of-stock">Agotado</span>
+                    {% endif %}
+                </div>
+                
+                <form method="post" action="{% url 'cart_add' %}" class="product-detail-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="product_id" value="{{ product.id }}">
+                    
+                    <div class="quantity-control" data-max-stock="{{ product.stock|default:0 }}">
+                        <label for="quantity">Cantidad:</label>
+                        <div class="quantity-input">
+                            <button type="button" class="quantity-btn minus" data-action="decrease">-</button>
+                            <input type="number" id="quantity" name="quantity" value="1" min="1" max="{{ product.stock }}" class="quantity-field">
+                            <button type="button" class="quantity-btn plus" data-action="increase">+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="product-actions">
+                        <button type="submit" class="btn btn-primary" {% if product.stock <= 0 %}disabled{% endif %}>
+                            <i class="fas fa-shopping-cart"></i> Añadir al Carrito
+                        </button>
+                        
+                        {% if user.is_authenticated %}
+                        <button type="button" class="btn btn-outline favorite-button {% if is_favorite %}active{% endif %}" data-product-id="{{ product.id }}">
+                            <i class="fas fa-heart"></i> {% if is_favorite %}Quitar de Favoritos{% else %}Añadir a Favoritos{% endif %}
+                        </button>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="related-products">
+            <h2 class="section-title">Productos Relacionados</h2>
+            <div class="title-separator"></div>
+            
+            <div class="products-grid">
+                {% for related_product in related_products %}
+                <div class="product-card">
+                    <div class="product-image-container">
+                        <a href="{% url 'product_detail' related_product.id %}">
+                            <img src="{% if related_product.image %}{{ related_product.image.url }}{% else %}{% static 'img/producto-default.jpg' %}{% endif %}" alt="{{ related_product.name }}" class="product-image">
+                            <div class="product-overlay">
+                                <button class="btn btn-add-cart">Ver Detalles</button>
+                            </div>
+                        </a>
+                    </div>
+                    <h3 class="product-title">{{ related_product.name }}</h3>
+                    <div class="product-price">{{ related_product.price }} €</div>
+                    <form method="post" action="{% url 'cart_add' %}" class="add-to-cart-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="product_id" value="{{ related_product.id }}">
+                        <input type="hidden" name="quantity" value="1">
+                        <button type="submit" class="btn btn-add-cart">
+                            <i class="fas fa-shopping-cart"></i> Añadir al Carrito
+                        </button>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Control de cantidad
+        const quantityControl = document.querySelector('.quantity-control');
+        const quantityField = document.getElementById('quantity');
+        const minusBtn = document.querySelector('.quantity-btn.minus');
+        const plusBtn = document.querySelector('.quantity-btn.plus');
+        
+        // Obtener maxStock desde el atributo de datos
+        const maxStock = parseInt(quantityControl.getAttribute('data-max-stock') || 0);
+        
+        minusBtn.addEventListener('click', function() {
+            let currentValue = parseInt(quantityField.value);
+            if (currentValue > 1) {
+                quantityField.value = currentValue - 1;
+            }
+        });
+        
+        plusBtn.addEventListener('click', function() {
+            let currentValue = parseInt(quantityField.value);
+            if (currentValue < maxStock) {
+                quantityField.value = currentValue + 1;
+            }
+        });
+        
+        // Favoritos
+        const favoriteButton = document.querySelector('.favorite-button');
+        
+        if (favoriteButton) {
+            favoriteButton.addEventListener('click', function() {
+                const productId = this.dataset.productId;
+                
+                // Crear formulario
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = "{% url 'favorite_toggle' %}";
+                
+                // CSRF Token
+                const csrfToken = document.createElement('input');
+                csrfToken.type = 'hidden';
+                csrfToken.name = 'csrfmiddlewaretoken';
+                csrfToken.value = '{{ csrf_token }}';
+                
+                // Product ID
+                const productIdInput = document.createElement('input');
+                productIdInput.type = 'hidden';
+                productIdInput.name = 'product_id';
+                productIdInput.value = productId;
+                
+                // Añadir inputs al formulario
+                form.appendChild(csrfToken);
+                form.appendChild(productIdInput);
+                
+                // Añadir formulario al documento y enviarlo
+                document.body.appendChild(form);
+                form.submit();
+            });
+        }
+    });
+</script>
+{% endblock %}

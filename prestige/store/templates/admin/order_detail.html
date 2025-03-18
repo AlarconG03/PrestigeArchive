@@ -1,0 +1,144 @@
+{% extends 'admin/base_admin.html' %}
+{% load static %}
+
+{% block title %}Detalle de Pedido - Administración Prestige{% endblock %}
+
+{% block admin_content %}
+<div class="admin-header">
+    <h1 class="admin-page-title">Detalle de Pedido #{{ order.order_id }}</h1>
+    <a href="{% url 'admin_orders' %}" class="btn btn-outline">
+        <i class="fas fa-arrow-left"></i> Volver a Pedidos
+    </a>
+</div>
+
+<div class="admin-row">
+    <div class="admin-col">
+        <div class="admin-card">
+            <div class="admin-card-header">
+                <h2 class="admin-card-title">Información del Pedido</h2>
+            </div>
+            <div class="admin-card-body">
+                <div class="order-info-grid">
+                    <div class="order-info-item">
+                        <div class="info-label">ID del Pedido</div>
+                        <div class="info-value">{{ order.order_id }}</div>
+                    </div>
+                    <div class="order-info-item">
+                        <div class="info-label">Fecha</div>
+                        <div class="info-value">{{ order.date|date:"d/m/Y H:i" }}</div>
+                    </div>
+                    <div class="order-info-item">
+                        <div class="info-label">Cliente</div>
+                        <div class="info-value">{{ order.user.get_full_name|default:order.user.username }}</div>
+                    </div>
+                    <div class="order-info-item">
+                        <div class="info-label">Email</div>
+                        <div class="info-value">{{ order.user.email }}</div>
+                    </div>
+                    <div class="order-info-item">
+                        <div class="info-label">Método de Pago</div>
+                        <div class="info-value">{{ order.payment.payment_method }}</div>
+                    </div>
+                    <div class="order-info-item">
+                        <div class="info-label">Estado del Pago</div>
+                        <div class="info-value">
+                            {% if order.payment.payment_status %}
+                            <span class="status-badge status-success">Pagado</span>
+                            {% else %}
+                            <span class="status-badge status-danger">Pendiente</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="admin-card">
+            <div class="admin-card-header">
+                <h2 class="admin-card-title">Dirección de Envío</h2>
+            </div>
+            <div class="admin-card-body">
+                <p>{{ order.shipping_address }}</p>
+            </div>
+        </div>
+        
+        <div class="admin-card">
+            <div class="admin-card-header">
+                <h2 class="admin-card-title">Estado del Pedido</h2>
+            </div>
+            <div class="admin-card-body">
+                <div class="current-status">
+                    <div class="info-label">Estado Actual</div>
+                    <div class="info-value">
+                        <span class="status-badge status-{{ order.status }}">{{ order.get_status_display }}</span>
+                    </div>
+                </div>
+                
+                <form method="post" class="status-form">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="status">Cambiar Estado</label>
+                        <select id="status" name="status" class="form-control">
+                            {% for status_code, status_name in order_statuses %}
+                            <option value="{{ status_code }}" {% if order.status == status_code %}selected{% endif %}>{{ status_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="tracking_number">Número de Seguimiento</label>
+                        <input type="text" id="tracking_number" name="tracking_number" class="form-control" value="{{ order.tracking_number|default:'' }}">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Actualizar Estado</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="admin-col">
+        <div class="admin-card">
+            <div class="admin-card-header">
+                <h2 class="admin-card-title">Productos</h2>
+            </div>
+            <div class="admin-card-body">
+                <div class="order-items-list">
+                    {% for item in order_items %}
+                    <div class="order-item">
+                        <div class="item-image">
+                            <img src="{% if item.product.image %}{{ item.product.image.url }}{% else %}{% static 'img/producto-default.jpg' %}{% endif %}" alt="{{ item.product.name }}">
+                        </div>
+                        <div class="item-details">
+                            <h3 class="item-name">{{ item.product.name }}</h3>
+                            <div class="item-meta">
+                                <span class="item-category">{{ item.product.category }}</span>
+                                <span class="item-quantity">x{{ item.quantity }}</span>
+                            </div>
+                        </div>
+                        <div class="item-price">
+                            <div class="price-per-unit">{{ item.price }} € / unidad</div>
+                            <div class="price-total">{{ item.subtotal }} €</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <div class="order-summary">
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <span>{{ order.payment.amount }} €</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Envío</span>
+                        <span>Gratis</span>
+                    </div>
+                    <div class="summary-row total-row">
+                        <span>Total</span>
+                        <span>{{ order.payment.amount }} €</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

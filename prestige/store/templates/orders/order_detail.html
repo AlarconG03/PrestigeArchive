@@ -1,0 +1,130 @@
+{% extends 'pages/base.html' %}
+{% load static %}
+
+{% block title %}Detalle de Pedido - Prestige{% endblock %}
+
+{% block content %}
+<section class="profile-section">
+    <div class="container">
+        <h1 class="section-title">Detalle de Pedido</h1>
+        <div class="title-separator"></div>
+        
+        <div class="profile-container">
+            <div class="profile-sidebar">
+                <div class="profile-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="profile-name">{{ user.get_full_name|default:user.username }}</div>
+                <div class="profile-email">{{ user.email }}</div>
+                
+                <div class="profile-menu">
+                    <a href="{% url 'profile' %}" class="profile-menu-item">
+                        <i class="fas fa-user"></i> Información Personal
+                    </a>
+                    <a href="{% url 'my_orders' %}" class="profile-menu-item active">
+                        <i class="fas fa-shopping-bag"></i> Mis Pedidos
+                    </a>
+                    <a href="#" class="profile-menu-item">
+                        <i class="fas fa-heart"></i> Favoritos
+                    </a>
+                    <a href="#" class="profile-menu-item">
+                        <i class="fas fa-map-marker-alt"></i> Direcciones
+                    </a>
+                    <a href="{% url 'logout' %}" class="profile-menu-item">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                    </a>
+                </div>
+            </div>
+            
+            <div class="profile-content">
+                <div class="profile-card">
+                    <div class="order-detail-header">
+                        <div class="order-detail-title">
+                            <h2 class="profile-card-title">Pedido #{{ order.order_id }}</h2>
+                            <span class="status-badge status-{{ order.status }}">{{ order.get_status_display }}</span>
+                        </div>
+                        <a href="{% url 'my_orders' %}" class="btn btn-sm btn-outline">
+                            <i class="fas fa-arrow-left"></i> Volver a Mis Pedidos
+                        </a>
+                    </div>
+                    
+                    <div class="order-info-grid">
+                        <div class="order-info-item">
+                            <div class="info-label">Fecha del Pedido</div>
+                            <div class="info-value">{{ order.date|date:"d/m/Y H:i" }}</div>
+                        </div>
+                        <div class="order-info-item">
+                            <div class="info-label">Método de Pago</div>
+                            <div class="info-value">{{ order.payment.payment_method }}</div>
+                        </div>
+                        <div class="order-info-item">
+                            <div class="info-label">Dirección de Envío</div>
+                            <div class="info-value">{{ order.shipping_address }}</div>
+                        </div>
+                        {% if order.tracking_number %}
+                        <div class="order-info-item">
+                            <div class="info-label">Número de Seguimiento</div>
+                            <div class="info-value">{{ order.tracking_number }}</div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="order-items-list">
+                        <h3 class="order-items-title">Productos</h3>
+                        
+                        <div class="order-items-table">
+                            <div class="order-items-header">
+                                <div class="item-header product-col">Producto</div>
+                                <div class="item-header price-col">Precio</div>
+                                <div class="item-header quantity-col">Cantidad</div>
+                                <div class="item-header subtotal-col">Subtotal</div>
+                            </div>
+                            
+                            {% for item in order_items %}
+                            <div class="order-item-row">
+                                <div class="product-col">
+                                    <div class="product-info">
+                                        <img src="{% if item.product.image %}{{ item.product.image.url }}{% else %}{% static 'img/producto-default.jpg' %}{% endif %}" alt="{{ item.product.name }}" class="product-image">
+                                        <div class="product-details">
+                                            <h4 class="product-name">{{ item.product.name }}</h4>
+                                            <p class="product-category">{{ item.product.category }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="price-col">{{ item.price }} €</div>
+                                <div class="quantity-col">{{ item.quantity }}</div>
+                                <div class="subtotal-col">{{ item.subtotal }} €</div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="order-summary">
+                            <div class="summary-row">
+                                <span>Subtotal</span>
+                                <span>{{ order.payment.amount }} €</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Envío</span>
+                                <span>Gratis</span>
+                            </div>
+                            <div class="summary-row total-row">
+                                <span>Total</span>
+                                <span>{{ order.payment.amount }} €</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {% if order.status == 'PE' %}
+                    <div class="order-actions">
+                        <form method="post" action="{% url 'cancel_order' order_id=order.order_id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('¿Estás seguro de que deseas cancelar este pedido?')">Cancelar Pedido</button>
+                        </form>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

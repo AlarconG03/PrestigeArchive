@@ -1,0 +1,133 @@
+{% extends 'pages/base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block title %}Carrito de Compras - Prestige{% endblock %}
+
+{% block content %}
+<section class="cart-section">
+    <div class="container">
+        <h1 class="section-title">Tu Carrito de Compras</h1>
+        <div class="title-separator"></div>
+        
+        {% if cart_items %}
+        <div class="cart-container">
+            <div class="cart-items">
+                <div class="cart-header">
+                    <div class="cart-header-item product-col">Producto</div>
+                    <div class="cart-header-item price-col">Precio</div>
+                    <div class="cart-header-item quantity-col">Cantidad</div>
+                    <div class="cart-header-item subtotal-col">Subtotal</div>
+                    <div class="cart-header-item actions-col"></div>
+                </div>
+                
+                {% for item in cart_items %}
+                <div class="cart-item">
+                    <div class="product-col">
+                        <div class="cart-product">
+                            <div class="cart-product-image">
+                                <img src="{% if item.product.image %}{{ item.product.image.url }}{% else %}{% static 'img/producto-default.jpg' %}{% endif %}" alt="{{ item.product.name }}">
+                            </div>
+                            <div class="cart-product-info">
+                                <h3 class="cart-product-name">{{ item.product.name }}</h3>
+                                <div class="cart-product-category">{{ item.product.category }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="price-col">{{ item.product.price }} €</div>
+                    
+                    <div class="quantity-col">
+                        <form method="post" action="{% url 'cart_update' %}" class="cart-quantity-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="item_id" value="{{ item.id }}">
+                            <div class="quantity-control">
+                                <button type="button" class="quantity-btn minus" data-action="decrease">-</button>
+                                <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="{{ item.product.stock }}" class="quantity-field">
+                                <button type="button" class="quantity-btn plus" data-action="increase">+</button>
+                            </div>
+                            <button type="submit" class="update-btn">Actualizar</button>
+                        </form>
+                    </div>
+                    
+                    <div class="subtotal-col">{{ item.product.price|mul:item.quantity|floatformat:2 }} €</div>
+                    
+                    <div class="actions-col">
+                        <form method="post" action="{% url 'cart_remove' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="item_id" value="{{ item.id }}">
+                            <button type="submit" class="remove-btn">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <div class="cart-summary">
+                <h2 class="summary-title">Resumen del Pedido</h2>
+                
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span>{{ total }} €</span>
+                </div>
+                
+                <div class="summary-row">
+                    <span>Envío</span>
+                    <span>Calculado en el checkout</span>
+                </div>
+                
+                <div class="summary-row total-row">
+                    <span>Total</span>
+                    <span>{{ total }} €</span>
+                </div>
+                
+                <div class="summary-actions">
+                    <a href="{% url 'checkout' %}" class="btn btn-primary btn-block">Proceder al Pago</a>
+                    <a href="{% url 'products' %}" class="btn btn-outline btn-block">Continuar Comprando</a>
+                    <button type="button" id="clear-cart-btn" class="btn btn-text">Vaciar Carrito</button>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="empty-cart">
+            <div class="empty-cart-icon">
+                <i class="fas fa-shopping-cart"></i>
+            </div>
+            <h2>Tu carrito está vacío</h2>
+            <p>Parece que aún no has añadido ningún producto a tu carrito.</p>
+            <a href="{% url 'products' %}" class="btn btn-primary">Explorar Productos</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Control de cantidad
+        const quantityForms = document.querySelectorAll('.cart-quantity-form');
+        
+        quantityForms.forEach(form => {
+            const minusBtn = form.querySelector('.quantity-btn.minus');
+            const plusBtn = form.querySelector('.quantity-btn.plus');
+            const quantityField = form.querySelector('.quantity-field');
+            const maxStock = parseInt(quantityField.getAttribute('max'));
+            
+            minusBtn.addEventListener('click', function() {
+                let currentValue = parseInt(quantityField.value);
+                if (currentValue > 1) {
+                    quantityField.value = currentValue - 1;
+                }
+            });
+            
+            plusBtn.addEventListener('click', function() {
+                let currentValue = parseInt(quantityField.value);
+                if (currentValue < maxStock) {
+                    quantityField.value = currentValue + 1;
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

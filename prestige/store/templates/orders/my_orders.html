@@ -1,0 +1,82 @@
+{% extends 'pages/base.html' %}
+{% load static %}
+
+{% block title %}Mis Pedidos - Prestige{% endblock %}
+
+{% block content %}
+<section class="profile-section">
+    <div class="container">
+        <h1 class="section-title">Mis Pedidos</h1>
+        <div class="title-separator"></div>
+        
+        <div class="profile-container">
+            <div class="profile-sidebar">
+                <div class="profile-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="profile-name">{{ user.get_full_name|default:user.username }}</div>
+                <div class="profile-email">{{ user.email }}</div>
+                
+                <div class="profile-menu">
+                    <a href="{% url 'profile' %}" class="profile-menu-item">
+                        <i class="fas fa-user"></i> Información Personal
+                    </a>
+                    <a href="{% url 'my_orders' %}" class="profile-menu-item active">
+                        <i class="fas fa-shopping-bag"></i> Mis Pedidos
+                    </a>
+                    <a href="#" class="profile-menu-item">
+                        <i class="fas fa-heart"></i> Favoritos
+                    </a>
+                    <a href="#" class="profile-menu-item">
+                        <i class="fas fa-map-marker-alt"></i> Direcciones
+                    </a>
+                    <a href="{% url 'logout' %}" class="profile-menu-item">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                    </a>
+                </div>
+            </div>
+            
+            <div class="profile-content">
+                <div class="profile-card">
+                    <h2 class="profile-card-title">Historial de Pedidos</h2>
+                    
+                    {% if orders %}
+                    <div class="orders-list">
+                        <div class="order-header">
+                            <div class="order-header-item">Pedido</div>
+                            <div class="order-header-item">Fecha</div>
+                            <div class="order-header-item">Estado</div>
+                            <div class="order-header-item">Total</div>
+                            <div class="order-header-item"></div>
+                        </div>
+                        
+                        {% for order in orders %}
+                        <div class="order-item">
+                            <div class="order-id">{{ order.order_id }}</div>
+                            <div class="order-date">{{ order.date|date:"d/m/Y" }}</div>
+                            <div class="order-status">
+                                <span class="status-badge status-{{ order.status }}">{{ order.get_status_display }}</span>
+                            </div>
+                            <div class="order-total">{{ order.payment.amount }} €</div>
+                            <div class="order-actions">
+                                <a href="{% url 'order_detail' order_id=order.order_id %}" class="btn btn-sm btn-outline">Ver Detalles</a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="empty-orders">
+                        <div class="empty-icon">
+                            <i class="fas fa-shopping-bag"></i>
+                        </div>
+                        <h3>No tienes pedidos</h3>
+                        <p>Aún no has realizado ningún pedido.</p>
+                        <a href="{% url 'home' %}" class="btn btn-primary">Explorar Productos</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

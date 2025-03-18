@@ -1,0 +1,74 @@
+{% extends 'pages/base.html' %}
+{% load static %}
+
+{% block title %}Resultados de Búsqueda - Prestige{% endblock %}
+
+{% block content %}
+<section class="search-results-section">
+    <div class="container">
+        <h1 class="section-title">Resultados de Búsqueda</h1>
+        <div class="title-separator"></div>
+        
+        <div class="search-query">
+            <p>Resultados para: <strong>"{{ query }}"</strong></p>
+        </div>
+        
+        {% if products %}
+        <div class="products-grid">
+            {% for product in products %}
+            <div class="product-card">
+                <div class="product-image-container">
+                    <a href="{% url 'product_detail' product.id %}">
+                        <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/producto-default.jpg' %}{% endif %}" alt="{{ product.name }}" class="product-image">
+                        <div class="product-overlay">
+                            <button class="btn btn-add-cart">Ver Detalles</button>
+                        </div>
+                    </a>
+                </div>
+                <h3 class="product-title">{{ product.name }}</h3>
+                <div class="product-price">{{ product.price }} €</div>
+                <form method="post" action="{% url 'cart_add' %}" class="add-to-cart-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="product_id" value="{{ product.id }}">
+                    <input type="hidden" name="quantity" value="1">
+                    <button type="submit" class="btn btn-add-cart">
+                        <i class="fas fa-shopping-cart"></i> Añadir al Carrito
+                    </button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+        
+        {% if is_paginated %}
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+            <a href="?q={{ query }}&page={{ page_obj.previous_page_number }}" class="pagination-link">
+                <i class="fas fa-chevron-left"></i> Anterior
+            </a>
+            {% endif %}
+            
+            <span class="pagination-info">
+                Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+            </span>
+            
+            {% if page_obj.has_next %}
+            <a href="?q={{ query }}&page={{ page_obj.next_page_number }}" class="pagination-link">
+                Siguiente <i class="fas fa-chevron-right"></i>
+            </a>
+            {% endif %}
+        </div>
+        {% endif %}
+        
+        {% else %}
+        <div class="empty-results">
+            <div class="empty-icon">
+                <i class="fas fa-search"></i>
+            </div>
+            <h3>No se encontraron resultados</h3>
+            <p>No hemos encontrado productos que coincidan con tu búsqueda.</p>
+            <a href="{% url 'products' %}" class="btn btn-primary">Ver Todos los Productos</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'pages/base.html' %}
+{% load static %}
+
+{% block title %}Iniciar Sesión - Prestige{% endblock %}
+
+{% block content %}
+<section class="auth-section">
+    <div class="container">
+        <div class="auth-container">
+            <h1 class="auth-title">Iniciar Sesión</h1>
+            <div class="title-separator"></div>
+            
+            <form method="post" class="auth-form">
+                {% csrf_token %}
+                
+                {% if form.errors %}
+                <div class="form-error">
+                    <p>Usuario o contraseña incorrectos. Por favor intenta de nuevo.</p>
+                </div>
+                {% endif %}
+                
+                <div class="form-group">
+                    <label for="{{ form.username.id_for_label }}">Nombre de usuario</label>
+                    {{ form.username }}
+                </div>
+                
+                <div class="form-group">
+                    <label for="{{ form.password.id_for_label }}">Contraseña</label>
+                    {{ form.password }}
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-block">Iniciar Sesión</button>
+                
+                <div class="auth-links">
+                    <p>¿No tienes una cuenta? <a href="{% url 'register' %}">Registrarse</a></p>
+                    <p><a href="#">¿Olvidaste tu contraseña?</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

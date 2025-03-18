@@ -1,0 +1,199 @@
+{% extends 'pages/base.html' %}
+{% load static %}
+
+{% block title %}Productos - Prestige{% endblock %}
+
+{% block content %}
+<section class="products-section">
+    <div class="container">
+        <h1 class="section-title">Productos</h1>
+        <div class="title-separator"></div>
+        
+        <div class="products-layout">
+            <div class="filters-sidebar">
+                <div class="filter-card">
+                    <h3 class="filter-title">Filtros</h3>
+                    
+                    <form method="get" class="filter-form">
+                        {% if current_search %}
+                        <input type="hidden" name="search" value="{{ current_search }}">
+                        {% endif %}
+                        
+                        <div class="filter-group">
+                            <h4 class="filter-group-title">Categorías</h4>
+                            <div class="filter-options">
+                                <div class="filter-option">
+                                    <input type="radio" id="category-all" name="category" value="" {% if not current_category %}checked{% endif %}>
+                                    <label for="category-all">Todas las categorías</label>
+                                </div>
+                                
+                                {% for category in categories %}
+                                <div class="filter-option">
+                                    <input type="radio" id="category-{{ forloop.counter }}" name="category" value="{{ category }}" {% if current_category == category %}checked{% endif %}>
+                                    <label for="category-{{ forloop.counter }}">{{ category }}</label>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <h4 class="filter-group-title">Precio</h4>
+                            <div class="price-range">
+                                <div class="price-inputs">
+                                    <div class="price-input">
+                                        <label for="min_price">Mínimo</label>
+                                        <input type="number" id="min_price" name="min_price" value="{{ current_min_price }}" min="0" placeholder="Min">
+                                    </div>
+                                    <div class="price-input">
+                                        <label for="max_price">Máximo</label>
+                                        <input type="number" id="max_price" name="max_price" value="{{ current_max_price }}" min="0" placeholder="Max">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <h4 class="filter-group-title">Ordenar por</h4>
+                            <div class="filter-options">
+                                <div class="filter-option">
+                                    <input type="radio" id="sort-name" name="sort" value="name" {% if current_sort == 'name' %}checked{% endif %}>
+                                    <label for="sort-name">Nombre (A-Z)</label>
+                                </div>
+                                <div class="filter-option">
+                                    <input type="radio" id="sort-name-desc" name="sort" value="name_desc" {% if current_sort == 'name_desc' %}checked{% endif %}>
+                                    <label for="sort-name-desc">Nombre (Z-A)</label>
+                                </div>
+                                <div class="filter-option">
+                                    <input type="radio" id="sort-price-asc" name="sort" value="price_asc" {% if current_sort == 'price_asc' %}checked{% endif %}>
+                                    <label for="sort-price-asc">Precio (menor a mayor)</label>
+                                </div>
+                                <div class="filter-option">
+                                    <input type="radio" id="sort-price-desc" name="sort" value="price_desc" {% if current_sort == 'price_desc' %}checked{% endif %}>
+                                    <label for="sort-price-desc">Precio (mayor a menor)</label>
+                                </div>
+                                <div class="filter-option">
+                                    <input type="radio" id="sort-newest" name="sort" value="newest" {% if current_sort == 'newest' %}checked{% endif %}>
+                                    <label for="sort-newest">Más recientes</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="filter-actions">
+                            <button type="submit" class="btn btn-primary">Aplicar Filtros</button>
+                            <a href="{% url 'products' %}" class="btn btn-outline">Limpiar Filtros</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="products-content">
+                {% if current_search %}
+                <div class="search-results">
+                    <p>Resultados para: <strong>{{ current_search }}</strong></p>
+                </div>
+                {% endif %}
+                
+                {% if products %}
+                <div class="products-grid">
+                    {% for product in products %}
+                    <div class="product-card">
+                        <div class="product-image-container">
+                            <a href="{% url 'product_detail' product.id %}">
+                                <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/producto-default.jpg' %}{% endif %}" alt="{{ product.name }}" class="product-image">
+                                <div class="product-overlay">
+                                    <button class="btn btn-add-cart">Ver Detalles</button>
+                                </div>
+                            </a>
+                            {% if user.is_authenticated %}
+                            <button class="favorite-button {% if product.id in favorites %}active{% endif %}" data-product-id="{{ product.id }}">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                            {% endif %}
+                        </div>
+                        <h3 class="product-title">{{ product.name }}</h3>
+                        <div class="product-price">{{ product.price }} €</div>
+                        <form method="post" action="{% url 'cart_add' %}" class="add-to-cart-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="product_id" value="{{ product.id }}">
+                            <input type="hidden" name="quantity" value="1">
+                            <button type="submit" class="btn btn-add-cart">
+                                <i class="fas fa-shopping-cart"></i> Añadir al Carrito
+                            </button>
+                        </form>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                {% if is_paginated %}
+                <div class="pagination">
+                    {% if page_obj.has_previous %}
+                    <a href="?{% if current_category %}category={{ current_category }}&{% endif %}{% if current_min_price %}min_price={{ current_min_price }}&{% endif %}{% if current_max_price %}max_price={{ current_max_price }}&{% endif %}{% if current_sort %}sort={{ current_sort }}&{% endif %}{% if current_search %}search={{ current_search }}&{% endif %}page={{ page_obj.previous_page_number }}" class="pagination-link">
+                        <i class="fas fa-chevron-left"></i> Anterior
+                    </a>
+                    {% endif %}
+                    
+                    <span class="pagination-info">
+                        Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+                    </span>
+                    
+                    {% if page_obj.has_next %}
+                    <a href="?{% if current_category %}category={{ current_category }}&{% endif %}{% if current_min_price %}min_price={{ current_min_price }}&{% endif %}{% if current_max_price %}max_price={{ current_max_price }}&{% endif %}{% if current_sort %}sort={{ current_sort }}&{% endif %}{% if current_search %}search={{ current_search }}&{% endif %}page={{ page_obj.next_page_number }}" class="pagination-link">
+                        Siguiente <i class="fas fa-chevron-right"></i>
+                    </a>
+                    {% endif %}
+                </div>
+                {% endif %}
+                
+                {% else %}
+                <div class="empty-products">
+                    <div class="empty-icon">
+                        <i class="fas fa-box-open"></i>
+                    </div>
+                    <h3>No se encontraron productos</h3>
+                    <p>Intenta con otros filtros o categorías.</p>
+                    <a href="{% url 'products' %}" class="btn btn-primary">Ver Todos los Productos</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Favoritos
+        const favoriteButtons = document.querySelectorAll('.favorite-button');
+        
+        favoriteButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const productId = this.dataset.productId;
+                
+                // Crear formulario
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = "{% url 'favorite_toggle' %}";
+                
+                // CSRF Token
+                const csrfToken = document.createElement('input');
+                csrfToken.type = 'hidden';
+                csrfToken.name = 'csrfmiddlewaretoken';
+                csrfToken.value = '{{ csrf_token }}';
+                
+                // Product ID
+                const productIdInput = document.createElement('input');
+                productIdInput.type = 'hidden';
+                productIdInput.name = 'product_id';
+                productIdInput.value = productId;
+                
+                // Añadir inputs al formulario
+                form.appendChild(csrfToken);
+                form.appendChild(productIdInput);
+                
+                // Añadir formulario al documento y enviarlo
+                document.body.appendChild(form);
+                form.submit();
+            });
+        });
+    });
+</script>
+{% endblock %}

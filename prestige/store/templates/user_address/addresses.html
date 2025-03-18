@@ -1,0 +1,105 @@
+{% extends 'pages/base.html' %}
+{% load static %}
+
+{% block title %}Mis Direcciones - Prestige{% endblock %}
+
+{% block content %}
+<section class="profile-section">
+    <div class="container">
+        <h1 class="section-title">Mis Direcciones</h1>
+        <div class="title-separator"></div>
+        
+        <div class="profile-container">
+            <div class="profile-sidebar">
+                <div class="profile-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="profile-name">{{ user.get_full_name|default:user.username }}</div>
+                <div class="profile-email">{{ user.email }}</div>
+                
+                <div class="profile-menu">
+                    <a href="{% url 'profile' %}" class="profile-menu-item">
+                        <i class="fas fa-user"></i> Información Personal
+                    </a>
+                    <a href="{% url 'my_orders' %}" class="profile-menu-item">
+                        <i class="fas fa-shopping-bag"></i> Mis Pedidos
+                    </a>
+                    <a href="{% url 'favorites' %}" class="profile-menu-item">
+                        <i class="fas fa-heart"></i> Favoritos
+                    </a>
+                    <a href="{% url 'addresses' %}" class="profile-menu-item active">
+                        <i class="fas fa-map-marker-alt"></i> Direcciones
+                    </a>
+                    <a href="{% url 'logout' %}" class="profile-menu-item">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                    </a>
+                </div>
+            </div>
+            
+            <div class="profile-content">
+                <div class="profile-card">
+                    <div class="address-header">
+                        <h2 class="profile-card-title">Mis Direcciones</h2>
+                        <a href="{% url 'address_add' %}" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Añadir Dirección
+                        </a>
+                    </div>
+                    
+                    {% if addresses %}
+                    <div class="addresses-list">
+                        {% for address in addresses %}
+                        <div class="address-item {% if address.is_default %}default{% endif %}">
+                            {% if address.is_default %}
+                            <div class="default-badge">Predeterminada</div>
+                            {% endif %}
+                            
+                            <div class="address-content">
+                                <h3 class="address-name">{{ address.name }}</h3>
+                                <div class="address-details">
+                                    <p>{{ address.address_line1 }}</p>
+                                    {% if address.address_line2 %}
+                                    <p>{{ address.address_line2 }}</p>
+                                    {% endif %}
+                                    <p>{{ address.city }}, {{ address.state }}, {{ address.postal_code }}</p>
+                                    <p>{{ address.country }}</p>
+                                    <p>Teléfono: {{ address.phone }}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="address-actions">
+                                <a href="{% url 'address_edit' address.id %}" class="btn btn-sm btn-outline">
+                                    <i class="fas fa-edit"></i> Editar
+                                </a>
+                                
+                                {% if not address.is_default %}
+                                <form method="post" action="{% url 'address_set_default' address.id %}" class="inline-form">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-outline">
+                                        <i class="fas fa-check"></i> Establecer como Predeterminada
+                                    </button>
+                                </form>
+                                
+                                <a href="{% url 'address_delete' address.id %}" class="btn btn-sm btn-danger">
+                                    <i class="fas fa-trash"></i> Eliminar
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="empty-addresses">
+                        <div class="empty-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <h3>No tienes direcciones guardadas</h3>
+                        <p>Añade una dirección para agilizar el proceso de compra.</p>
+                        <a href="{% url 'address_add' %}" class="btn btn-primary">Añadir Dirección</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,235 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Prestige - Ropa de Lujo{% endblock %}</title>
+    <!-- Estilos CSS -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <!-- Iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container container">
+            <div class="navbar-left">
+                <a href="{% url 'home' %}" class="logo">PRESTIGE</a>
+                
+                <div class="main-nav desktop-only">
+                    <a href="#" class="nav-link">Novedades</a>
+                    <a href="{% url 'products' %}" class="nav-link">Productos</a>
+                    <a href="#" class="nav-link">Hombre</a>
+                    <a href="#" class="nav-link">Mujer</a>
+                    <a href="#" class="nav-link">Accesorios</a>
+                </div>
+            </div>
+            
+            <div class="navbar-right">
+                <div class="search-container desktop-only">
+                    <form action="{% url 'search' %}" method="get">
+                        <input type="text" name="q" class="search-input" placeholder="Buscar productos..." required>
+                        <button type="submit" class="search-button">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
+                </div>
+                
+                <button class="icon-button mobile-search-toggle mobile-only">
+                    <i class="fas fa-search"></i>
+                </button>
+                
+                <a href="{% url 'cart' %}" class="icon-button">
+                    <i class="fas fa-shopping-cart"></i>
+                    {% if user.is_authenticated %}
+                    {% with cart_count=user.cart.cartitem_set.all|length %}
+                    {% if cart_count > 0 %}
+                    <span class="cart-count">{{ cart_count }}</span>
+                    {% endif %}
+                    {% endwith %}
+                    {% endif %}
+                </a>
+                
+                <div class="dropdown">
+                    <button class="icon-button">
+                        <i class="fas fa-user"></i>
+                    </button>
+                    <div class="dropdown-content">
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'profile' %}">Mi Perfil</a>
+                            <a href="{% url 'my_orders' %}">Mis Pedidos</a>
+                            <a href="{% url 'favorites' %}">Favoritos</a>
+                            <a href="{% url 'addresses' %}">Direcciones</a>
+                            {% if user.is_staff %}
+                                <a href="{% url 'admin_dashboard' %}">Panel de Administración</a>
+                            {% endif %}
+                            <a href="{% url 'logout' %}">Cerrar Sesión</a>
+                        {% else %}
+                            <a href="{% url 'login' %}">Iniciar Sesión</a>
+                            <a href="{% url 'register' %}">Registrarse</a>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <button id="menu-toggle" class="menu-toggle mobile-only">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Búsqueda Móvil -->
+    <div id="mobile-search" class="mobile-search">
+        <div class="container">
+            <div class="mobile-search-container">
+                <form action="{% url 'search' %}" method="get" class="search-form">
+                    <input type="text" name="q" class="search-input" placeholder="Buscar productos..." required>
+                    <button type="submit" class="search-button">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+                <button id="close-search" class="close-search">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menú Móvil -->
+    <div id="mobile-menu" class="mobile-menu">
+        <div class="mobile-menu-header">
+            <button id="close-menu" class="close-menu">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="mobile-menu-content">
+            <nav class="mobile-nav">
+                <a href="{% url 'home' %}" class="nav-link">Inicio</a>
+                <a href="{% url 'products' %}" class="nav-link">Productos</a>
+                <a href="#" class="nav-link">Hombre</a>
+                <a href="#" class="nav-link">Mujer</a>
+                <a href="#" class="nav-link">Accesorios</a>
+            </nav>
+            
+            <div class="mobile-user-menu">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'profile' %}" class="nav-link">Mi Perfil</a>
+                    <a href="{% url 'my_orders' %}" class="nav-link">Mis Pedidos</a>
+                    <a href="{% url 'favorites' %}" class="nav-link">Favoritos</a>
+                    <a href="{% url 'addresses' %}" class="nav-link">Direcciones</a>
+                    {% if user.is_staff %}
+                        <a href="{% url 'admin_dashboard' %}" class="nav-link">Panel de Administración</a>
+                    {% endif %}
+                    <a href="{% url 'logout' %}" class="nav-link">Cerrar Sesión</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="nav-link">Iniciar Sesión</a>
+                    <a href="{% url 'register' %}" class="nav-link">Registrarse</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenido principal -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h3 class="footer-title">PRESTIGE</h3>
+                    <p class="footer-text">
+                        Ropa de lujo para quienes aprecian la calidad excepcional y la elegancia atemporal.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-link">
+                            <i class="fab fa-facebook"></i>
+                            <span class="sr-only">Facebook</span>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-instagram"></i>
+                            <span class="sr-only">Instagram</span>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-twitter"></i>
+                            <span class="sr-only">Twitter</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3 class="footer-heading">Tienda</h3>
+                    <ul class="footer-links">
+                        <li><a href="#" class="footer-link">Novedades</a></li>
+                        <li><a href="#" class="footer-link">Mujer</a></li>
+                        <li><a href="#" class="footer-link">Hombre</a></li>
+                        <li><a href="#" class="footer-link">Accesorios</a></li>
+                        <li><a href="#" class="footer-link">Ofertas</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3 class="footer-heading">Empresa</h3>
+                    <ul class="footer-links">
+                        <li><a href="#" class="footer-link">Nuestra Historia</a></li>
+                        <li><a href="#" class="footer-link">Empleo</a></li>
+                        <li><a href="#" class="footer-link">Responsabilidad Corporativa</a></li>
+                        <li><a href="#" class="footer-link">Prensa</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3 class="footer-heading">Atención al Cliente</h3>
+                    <ul class="footer-links">
+                        <li><a href="#" class="footer-link">Contáctanos</a></li>
+                        <li><a href="#" class="footer-link">Envíos y Devoluciones</a></li>
+                        <li><a href="#" class="footer-link">Preguntas Frecuentes</a></li>
+                        <li><a href="#" class="footer-link">Guía de Tallas</a></li>
+                        <li><a href="#" class="footer-link">Localizador de Tiendas</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="copyright">
+                    &copy; {% now "Y" %} Prestige Ropa de Lujo. Todos los derechos reservados.
+                </p>
+                <div class="legal-links">
+                    <a href="#" class="legal-link">Política de Privacidad</a>
+                    <a href="#" class="legal-link">Términos de Servicio</a>
+                    <a href="#" class="legal-link">Accesibilidad</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{% static 'js/main.js' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cerrar mensajes
+            const closeButtons = document.querySelectorAll('.close-message');
+            closeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const message = this.parentElement;
+                    message.classList.add('hiding');
+                    setTimeout(() => {
+                        message.remove();
+                    }, 300);
+                });
+            });
+            
+            // Auto-cerrar mensajes después de 5 segundos
+            const messages = document.querySelectorAll('.message');
+            messages.forEach(message => {
+                setTimeout(() => {
+                    message.classList.add('hiding');
+                    setTimeout(() => {
+                        message.remove();
+                    }, 300);
+                }, 5000);
+            });
+        });
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
