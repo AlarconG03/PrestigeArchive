@@ -450,6 +450,13 @@ class CartRemoveView(LoginRequiredMixin, View):
         messages.success(request, f'{product_name} eliminado del carrito.')
         return redirect('cart')
 
+class CartClearView(View):
+    def post(self, request):
+        shopping_cart = request.user.shopping_cart
+        shopping_cart.clear_cart()
+        messages.success(request, "Carrito vaciado con éxito")
+        return redirect('cart')
+
 # Vistas de checkout
 class CheckoutView(LoginRequiredMixin, TemplateView):
     template_name = 'checkout/checkout.html'

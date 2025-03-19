@@ -1,5 +1,6 @@
 from django.urls import path
 from django.contrib.auth.views import LogoutView
+from .views import CartClearView
 from . import views
 
 urlpatterns = [
@@ -38,6 +39,7 @@ urlpatterns = [
     path('cart/add/', views.CartAddView.as_view(), name='cart_add'),
     path('cart/update/', views.CartUpdateView.as_view(), name='cart_update'),
     path('cart/remove/', views.CartRemoveView.as_view(), name='cart_remove'),
+    path('cart/clear/', CartClearView.as_view(), name='cart_clear'),
     
     # Checkout(checkout)
     path('checkout/', views.CheckoutView.as_view(), name='checkout'),
