@@ -24,6 +24,11 @@
                             <button href="{% url 'product_detail' product.id %}"  class="btn btn-view-details">Ver Detalles</button>
                         </div>
                     </a>
+                    {% if user.is_authenticated %}
+                        <button class="favorite-button {% if product.id in favorites %}active{% endif %}" data-product-id="{{ product.id }}">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                    {% endif %}
                 </div>
                 <h3 class="product-title">{{ product.name }}</h3>
                 <div class="product-price">{{ product.price }} €</div>
