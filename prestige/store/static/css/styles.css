@@ -3419,3 +3419,128 @@ button {
 .search-query strong {
     color: var(--color-white);
 }
+
+.logout-form {
+    display: block;
+    margin: 0;
+    padding: 0;
+}
+  
+.logout-form button {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    font: inherit;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    color: var(--color-white);
+    font-size: 0.875rem;
+    transition: background-color var(--transition-fast);
+}
+
+.logout-form button:hover {
+    background-color: rgba(168, 123, 5, 0.1);
+}
+
+.profile-menu .logout-form {
+    display: block;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+  
+.profile-menu .logout-form button.profile-menu-item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    font: inherit;
+    cursor: pointer;
+    padding: 0.75rem 1rem;
+    color: var(--color-white);
+    font-size: 0.875rem;
+    transition: background-color var(--transition-fast);
+}
+  
+.profile-menu .logout-form button.profile-menu-item i {
+    margin-right: 0.75rem;
+    width: 1rem;
+    text-align: center;
+}
+  
+.profile-menu .logout-form button.profile-menu-item:hover {
+    background-color: rgba(168, 123, 5, 0.1);
+}
+
+.password-change-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.password-change-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--color-white);
+}
+
+.password-change-form input {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: transparent;
+    border: 1px solid var(--color-brown);
+    border-radius: var(--border-radius-md);
+    color: var(--color-white);
+}
+
+.password-change-form input:focus {
+    outline: none;
+    border-color: var(--color-gold);
+    box-shadow: 0 0 0 1px var(--color-gold);
+}
+
+.form-error {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+.form-help {
+    color: var(--color-gray);
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+}
+
+.form-help ul {
+    padding-left: 1.5rem;
+    margin-top: 0.25rem;
+}
+
+.delete-confirmation {
+    text-align: center;
+}
+
+.delete-confirmation p {
+    color: var(--color-gray);
+    margin-bottom: 1.5rem;
+}
+
+.delete-confirmation .address-item {
+    background-color: rgba(168, 123, 5, 0.05);
+    border: 1px solid rgba(168, 123, 5, 0.2);
+    border-radius: var(--border-radius-md);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}
