@@ -86,7 +86,7 @@
                 <div class="summary-actions">
                     <a href="{% url 'checkout' %}" class="btn btn-primary btn-block">Proceder al Pago</a>
                     <a href="{% url 'products' %}" class="btn btn-outline btn-block">Continuar Comprando</a>
-                    <div class="actions-col">
+                    <div class="summary-actions-separator">
                         <form method="post" action="{% url 'cart_clear' %}">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-text">Vaciar Carrito</button>
