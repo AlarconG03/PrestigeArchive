@@ -30,9 +30,12 @@
                     <a href="{% url 'addresses' %}" class="profile-menu-item active">
                         <i class="fas fa-map-marker-alt"></i> Direcciones
                     </a>
-                    <a href="{% url 'logout' %}" class="profile-menu-item">
-                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-                    </a>
+                    <form method="post" action="{% url 'logout' %}" class="logout-form">
+                        {% csrf_token %}
+                        <button type="submit" class="profile-menu-item">
+                            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                        </button>
+                    </form>
                 </div>
             </div>
             

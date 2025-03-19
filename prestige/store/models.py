@@ -11,12 +11,19 @@ class User(AbstractUser):
         return self.username
 
 class Product(models.Model):
+    product_id = models.PositiveIntegerField(unique=True, editable=False)
     name = models.CharField(max_length=200)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField()
     category = models.CharField(max_length=100)
     stock = models.PositiveIntegerField(default=0)
     image = models.ImageField(upload_to='products/', null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.product_id:
+            max_id = Product.objects.aggregate(models.Max('product_id'))['product_id__max']
+            self.product_id = (max_id or 0) + 1  # Si no hay productos, inicia en 1
+        super().save(*args, **kwargs)
     
     def __str__(self):
         return self.name
@@ -99,13 +106,19 @@ class Payment(models.Model):
         return True
 
 class Order(models.Model):
-    order_id = models.CharField(max_length=20, unique=True)
+    order_id = models.PositiveIntegerField(unique=True, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
     payment = models.OneToOneField(Payment, on_delete=models.SET_NULL, null=True, blank=True)
     status = models.CharField(max_length=2, choices=OrderStatus.choices, default=OrderStatus.PENDING)
     shipping_address = models.TextField()
     tracking_number = models.CharField(max_length=100, blank=True, null=True)
     date = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        if not self.order_id:
+            max_id = Order.objects.aggregate(models.Max('order_id'))['order_id__max']
+            self.order_id = (max_id or 0) + 1  # Si no hay órdenes, inicia en 1
+        super().save(*args, **kwargs)
     
     def __str__(self):
         return f"Orden {self.order_id}"

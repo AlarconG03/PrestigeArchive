@@ -12,7 +12,7 @@ urlpatterns = [
     
     # Autenticación (auth)
     path('login/', views.CustomLoginView.as_view(), name='login'),
-    path('logout/', LogoutView.as_view(next_page='home'), name='logout'),
+    path('logout/', LogoutView.as_view(), name='logout'),
     path('register/', views.RegisterView.as_view(), name='register'),
     
     # Perfil de usuario (user_profile)
@@ -21,7 +21,7 @@ urlpatterns = [
     
     # Pedidos(orders)
     path('my-orders/', views.OrderListView.as_view(), name='my_orders'),
-    path('my-orders/<str:order_id>/', views.OrderDetailView.as_view(), name='order_detail'),
+    path('my-orders/<int:order_id>/', views.OrderDetailView.as_view(), name='order_detail'),
     
     # Favoritos(user_fav)
     path('favorites/', views.FavoriteListView.as_view(), name='favorites'),
@@ -44,7 +44,7 @@ urlpatterns = [
     # Checkout(checkout)
     path('checkout/', views.CheckoutView.as_view(), name='checkout'),
     path('checkout/create-order/', views.OrderCreateView.as_view(), name='create_order'),
-    path('order-confirmation/<str:order_id>/', views.OrderConfirmationView.as_view(), name='order_confirmation'),
+    path('order-confirmation/<int:order_id>/', views.OrderConfirmationView.as_view(), name='order_confirmation'),
     
     # Newsletter
     path('newsletter/subscribe/', views.NewsletterSubscribeView.as_view(), name='newsletter_subscribe'),
@@ -56,6 +56,6 @@ urlpatterns = [
     path('admin/products/<int:pk>/edit/', views.AdminProductUpdateView.as_view(), name='admin_product_edit'),
     path('admin/products/<int:pk>/delete/', views.AdminProductDeleteView.as_view(), name='admin_product_delete'),
     path('admin/orders/', views.AdminOrderListView.as_view(), name='admin_orders'),
-    path('admin/orders/<str:order_id>/', views.AdminOrderDetailView.as_view(), name='admin_order_detail'),
+    path('admin/orders/<int:order_id>/', views.AdminOrderDetailView.as_view(), name='admin_order_detail'),
     path('admin/users/', views.AdminUserListView.as_view(), name='admin_users'),
 ]

@@ -1,12 +1,12 @@
 {% extends 'pages/base.html' %}
 {% load static %}
 
-{% block title %}Mi Perfil - Prestige{% endblock %}
+{% block title %}Eliminar Dirección - Prestige{% endblock %}
 
 {% block content %}
 <section class="profile-section">
     <div class="container">
-        <h1 class="section-title">Mi Perfil</h1>
+        <h1 class="section-title">Eliminar Dirección</h1>
         <div class="title-separator"></div>
         
         <div class="profile-container">
@@ -18,7 +18,7 @@
                 <div class="profile-email">{{ user.email }}</div>
                 
                 <div class="profile-menu">
-                    <a href="{% url 'profile' %}" class="profile-menu-item active">
+                    <a href="{% url 'profile' %}" class="profile-menu-item">
                         <i class="fas fa-user"></i> Información Personal
                     </a>
                     <a href="{% url 'my_orders' %}" class="profile-menu-item">
@@ -27,7 +27,7 @@
                     <a href="{% url 'favorites' %}" class="profile-menu-item">
                         <i class="fas fa-heart"></i> Favoritos
                     </a>
-                    <a href="{% url 'addresses' %}" class="profile-menu-item">
+                    <a href="{% url 'addresses' %}" class="profile-menu-item active">
                         <i class="fas fa-map-marker-alt"></i> Direcciones
                     </a>
                     <form method="post" action="{% url 'logout' %}" class="logout-form">
@@ -41,37 +41,31 @@
             
             <div class="profile-content">
                 <div class="profile-card">
-                    <h2 class="profile-card-title">Información Personal</h2>
+                    <h2 class="profile-card-title">Confirmar Eliminación</h2>
                     
-                    <form method="post" class="profile-form">
-                        {% csrf_token %}
+                    <div class="delete-confirmation">
+                        <p>¿Estás seguro de que deseas eliminar la siguiente dirección?</p>
                         
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="first_name">Nombre</label>
-                                <input type="text" id="first_name" name="first_name" class="form-control" value="{{ user.first_name }}">
+                        <div class="address-item">
+                            <h3 class="address-name">{{ object.name }}</h3>
+                            <div class="address-details">
+                                <p>{{ object.address_line1 }}</p>
+                                {% if object.address_line2 %}
+                                <p>{{ object.address_line2 }}</p>
+                                {% endif %}
+                                <p>{{ object.city }}, {{ object.state }}, {{ object.postal_code }}</p>
+                                <p>{{ object.country }}</p>
+                                <p>Teléfono: {{ object.phone }}</p>
                             </div>
-                            <div class="form-group">
-                                <label for="last_name">Apellido</label>
-                                <input type="text" id="last_name" name="last_name" class="form-control" value="{{ user.last_name }}">
+                        </div>
+                        
+                        <form method="post" class="delete-form">
+                            {% csrf_token %}
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-danger">Eliminar Dirección</button>
+                                <a href="{% url 'addresses' %}" class="btn btn-outline">Cancelar</a>
                             </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" id="email" name="email" class="form-control" value="{{ user.email }}">
-                        </div>
-                        
-                        <div class="form-actions">
-                            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-                        </div>
-                    </form>
-                </div>
-                
-                <div class="profile-card">
-                    <h2 class="profile-card-title">Cambiar Contraseña</h2>
-                    <div class="form-actions">
-                        <a href="{% url 'password_change' %}" class="btn btn-primary">Cambiar Contraseña</a>
+                        </form>
                     </div>
                 </div>
             </div>
