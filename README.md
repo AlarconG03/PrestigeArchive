@@ -13,17 +13,14 @@ Prestige Archive es una plataforma de e-commerce para ropa de lujo desarrollada 
 ## Instalación y Ejecución
 
 1. Clona el repositorio:
-   bash
    git clone https://github.com/AlarconG03/PrestigeArchive
    cd PrestigeArchive/prestige
    
 2. Aplica las migraciones:
-   bash
    python manage.py makemigrations
    python manage.py migrate
    
 3. Ejecuta el servidor:
-   bash
    python manage.py runserver
 
 4. Accede a la aplicación desde el navegador en:
