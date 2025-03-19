@@ -76,4 +76,42 @@
         {% endif %}
     </div>
 </section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Favoritos
+        const favoriteButtons = document.querySelectorAll('.favorite-button');
+        
+        favoriteButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const productId = this.dataset.productId;
+                
+                // Crear formulario
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = "{% url 'favorite_toggle' %}";
+                
+                // CSRF Token
+                const csrfToken = document.createElement('input');
+                csrfToken.type = 'hidden';
+                csrfToken.name = 'csrfmiddlewaretoken';
+                csrfToken.value = '{{ csrf_token }}';
+                
+                // Product ID
+                const productIdInput = document.createElement('input');
+                productIdInput.type = 'hidden';
+                productIdInput.name = 'product_id';
+                productIdInput.value = productId;
+                
+                // Añadir inputs al formulario
+                form.appendChild(csrfToken);
+                form.appendChild(productIdInput);
+                
+                // Añadir formulario al documento y enviarlo
+                document.body.appendChild(form);
+                form.submit();
+            });
+        });
+    });
+</script>
 {% endblock %}

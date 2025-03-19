@@ -602,6 +602,13 @@ class SearchView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['query'] = self.request.GET.get('q', '')
+        
+        # Contexto Favoritos
+        if self.request.user.is_authenticated:
+            context['favorites'] = Favorite.objects.filter(
+                user=self.request.user
+            ).values_list('product_id', flat=True)
+        
         return context
 
 # Vistas de administración
