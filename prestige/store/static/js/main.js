@@ -197,3 +197,24 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
+
+// Funciones para el selector de idioma
+function toggleLanguageDropdown() {
+    const dropdown = document.getElementById('languageDropdown');
+    dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+}
+
+function changeLanguage(lang) {
+    document.getElementById('languageInput').value = lang;
+    document.querySelector('.language-form').submit();
+}
+
+// Cerrar el dropdown cuando se hace clic fuera de él
+document.addEventListener('click', function(event) {
+    const container = document.querySelector('.language-selector-container');
+    const dropdown = document.getElementById('languageDropdown');
+    
+    if (container && !container.contains(event.target) && dropdown.style.display === 'block') {
+        dropdown.style.display = 'none';
+    }
+});

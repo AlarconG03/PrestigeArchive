@@ -1,0 +1,243 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-05-12 21:20-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: .\prestige\settings.py:142
+msgid "Español"
+msgstr ""
+
+#: .\prestige\settings.py:143
+msgid "Inglés"
+msgstr ""
+
+#: .\store\forms.py:69
+msgid "Tu dirección de email"
+msgstr "Your email address"
+
+#: .\store\templates\pages\base.html:9
+msgid "Prestige - Ropa de Lujo"
+msgstr "Prestige - Luxury Clothing"
+
+#: .\store\templates\pages\base.html:24 .\store\templates\pages\base.html:179
+msgid "Novedades"
+msgstr "News"
+
+#: .\store\templates\pages\base.html:25 .\store\templates\pages\base.html:123
+msgid "Productos"
+msgstr "Products"
+
+#: .\store\templates\pages\base.html:26 .\store\templates\pages\base.html:124
+#: .\store\templates\pages\base.html:181
+msgid "Hombre"
+msgstr "Man"
+
+#: .\store\templates\pages\base.html:27 .\store\templates\pages\base.html:125
+#: .\store\templates\pages\base.html:180
+msgid "Mujer"
+msgstr "Woman"
+
+#: .\store\templates\pages\base.html:28 .\store\templates\pages\base.html:126
+#: .\store\templates\pages\base.html:182
+msgid "Accesorios"
+msgstr "Accessories"
+
+#: .\store\templates\pages\base.html:35
+msgid "Buscar productos..."
+msgstr "Search for products..."
+
+#: .\store\templates\pages\base.html:63 .\store\templates\pages\base.html:131
+msgid "Mi Perfil"
+msgstr "My Profile"
+
+#: .\store\templates\pages\base.html:64 .\store\templates\pages\base.html:132
+msgid "Mis Pedidos"
+msgstr "My Orders"
+
+#: .\store\templates\pages\base.html:65 .\store\templates\pages\base.html:133
+msgid "Favoritos"
+msgstr "Favorites"
+
+#: .\store\templates\pages\base.html:66 .\store\templates\pages\base.html:134
+msgid "Direcciones"
+msgstr "Addresses"
+
+#: .\store\templates\pages\base.html:68 .\store\templates\pages\base.html:136
+msgid "Panel de Administración"
+msgstr "Administration Panel"
+
+#: .\store\templates\pages\base.html:72 .\store\templates\pages\base.html:138
+msgid "Cerrar Sesión"
+msgstr "Log Out"
+
+#: .\store\templates\pages\base.html:75 .\store\templates\pages\base.html:140
+msgid "Iniciar Sesión"
+msgstr "Login"
+
+#: .\store\templates\pages\base.html:76 .\store\templates\pages\base.html:141
+msgid "Registrarse"
+msgstr "Register"
+
+#: .\store\templates\pages\base.html:122
+msgid "Inicio"
+msgstr "Home"
+
+#: .\store\templates\pages\base.html:159
+msgid ""
+"Ropa de lujo para quienes aprecian la calidad excepcional y la elegancia "
+"atemporal."
+msgstr ""
+"Luxury clothing for those who appreciate exceptional quality and timeless "
+"elegance."
+
+#: .\store\templates\pages\base.html:177
+msgid "Tienda"
+msgstr "Store"
+
+#: .\store\templates\pages\base.html:183
+msgid "Ofertas"
+msgstr "Offers"
+
+#: .\store\templates\pages\base.html:187
+msgid "Empresa"
+msgstr "Company"
+
+#: .\store\templates\pages\base.html:189
+msgid "Nuestra Historia"
+msgstr "Our History"
+
+#: .\store\templates\pages\base.html:190
+msgid "Empleo"
+msgstr "Employment"
+
+#: .\store\templates\pages\base.html:191
+msgid "Responsabilidad Corporativa"
+msgstr "Corporate Responsibility"
+
+#: .\store\templates\pages\base.html:192
+msgid "Prensa"
+msgstr "Press"
+
+#: .\store\templates\pages\base.html:196
+msgid "Atención al Cliente"
+msgstr "Customer Service"
+
+#: .\store\templates\pages\base.html:198
+msgid "Contáctanos"
+msgstr "Contact us"
+
+#: .\store\templates\pages\base.html:199
+msgid "Envíos y Devoluciones"
+msgstr "Shipping and Returns"
+
+#: .\store\templates\pages\base.html:200
+msgid "Preguntas Frecuentes"
+msgstr "Frequently Asked Questions"
+
+#: .\store\templates\pages\base.html:201
+msgid "Guía de Tallas"
+msgstr "Size Guide"
+
+#: .\store\templates\pages\base.html:202
+msgid "Localizador de Tiendas"
+msgstr "Store Locator"
+
+#: .\store\templates\pages\base.html:208
+msgid "Prestige Ropa de Lujo. Todos los derechos reservados."
+msgstr "Prestige Luxury Clothing. All rights reserved."
+
+#: .\store\templates\pages\base.html:211
+msgid "Política de Privacidad"
+msgstr "Privacy Policy"
+
+#: .\store\templates\pages\base.html:212
+msgid "Términos de Servicio"
+msgstr "Terms of Service"
+
+#: .\store\templates\pages\base.html:213
+msgid "Accesibilidad"
+msgstr "Accessibility"
+
+#: .\store\templates\pages\home.html:15
+msgid "Eleva Tu Estilo con "
+msgstr "Elevate Your Style with "
+
+#: .\store\templates\pages\home.html:18
+msgid ""
+"Descubre nuestra exclusiva colección de ropa de lujo diseñada para quienes "
+"aprecian la calidad excepcional y la elegancia atemporal."
+msgstr ""
+"Discover our exclusive collection of luxury clothing designed for those who "
+"appreciate exceptional quality and timeless elegance."
+
+#: .\store\templates\pages\home.html:21
+msgid "Comprar Novedades"
+msgstr "Buy News"
+
+#: .\store\templates\pages\home.html:22
+msgid "Explorar Colecciones"
+msgstr "Explore Collections"
+
+#: .\store\templates\pages\home.html:31
+msgid "Productos Destacados"
+msgstr "Featured Products"
+
+#: .\store\templates\pages\home.html:34
+msgid ""
+"Descubre nuestra selección de piezas de lujo que definen la elegancia y la "
+"sofisticación."
+msgstr ""
+"Discover our selection of luxury pieces that define elegance and "
+"sophistication."
+
+#: .\store\templates\pages\home.html:49
+msgid "Añadir al Carrito"
+msgstr "Add to Cart"
+
+#: .\store\templates\pages\home.html:59
+msgid "Ver Todos los Productos"
+msgstr "See All Products"
+
+#: .\store\templates\pages\home.html:68
+msgid "Comprar por Categoría"
+msgstr "Shop by Category"
+
+#: .\store\templates\pages\home.html:71
+msgid ""
+"Explora nuestras colecciones diseñadas para el conocedor moderno de lujo."
+msgstr "Explore our collections designed for the modern luxury connoisseur."
+
+#: .\store\templates\pages\home.html:86
+msgid "Explorar Colección"
+msgstr "Explore Collection"
+
+#: .\store\templates\pages\home.html:100
+msgid "Suscríbete a nuestro Newsletter"
+msgstr "Subscribe to our Newsletter"
+
+#: .\store\templates\pages\home.html:101
+msgid ""
+"Recibe las últimas novedades, ofertas exclusivas y contenido personalizado "
+"directamente en tu bandeja de entrada."
+msgstr ""
+"Receive the latest news, exclusive offers, and personalized content directly "
+"to your inbox."
+
+#: .\store\templates\pages\home.html:107
+msgid "Suscribirse"
+msgstr "Subscribe"

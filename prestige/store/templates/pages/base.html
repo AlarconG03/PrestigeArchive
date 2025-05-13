@@ -1,10 +1,12 @@
 {% load static %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Prestige - Ropa de Lujo{% endblock %}</title>
+    <title>{% block title %}{% trans "Prestige - Ropa de Lujo" %}{% endblock %}</title>
     <!-- Estilos CSS -->
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <!-- Iconos -->
@@ -19,18 +21,18 @@
                 <a href="{% url 'home' %}" class="logo">PRESTIGE</a>
                 
                 <div class="main-nav desktop-only">
-                    <a href="#" class="nav-link">Novedades</a>
-                    <a href="{% url 'products' %}" class="nav-link">Productos</a>
-                    <a href="#" class="nav-link">Hombre</a>
-                    <a href="#" class="nav-link">Mujer</a>
-                    <a href="#" class="nav-link">Accesorios</a>
+                    <a href="#" class="nav-link">{% trans "Novedades" %}</a>
+                    <a href="{% url 'products' %}" class="nav-link">{% trans "Productos" %}</a>
+                    <a href="#" class="nav-link">{% trans "Hombre" %}</a>
+                    <a href="#" class="nav-link">{% trans "Mujer" %}</a>
+                    <a href="#" class="nav-link">{% trans "Accesorios" %}</a>
                 </div>
             </div>
             
             <div class="navbar-right">
                 <div class="search-container desktop-only">
                     <form action="{% url 'search' %}" method="get">
-                        <input type="text" name="q" class="search-input" placeholder="Buscar productos..." required>
+                        <input type="text" name="q" class="search-input" placeholder="{% trans 'Buscar productos...' %}" required>
                         <button type="submit" class="search-button">
                             <i class="fas fa-search"></i>
                         </button>
@@ -58,21 +60,42 @@
                     </button>
                     <div class="dropdown-content">
                         {% if user.is_authenticated %}
-                            <a href="{% url 'profile' %}">Mi Perfil</a>
-                            <a href="{% url 'my_orders' %}">Mis Pedidos</a>
-                            <a href="{% url 'favorites' %}">Favoritos</a>
-                            <a href="{% url 'addresses' %}">Direcciones</a>
+                            <a href="{% url 'profile' %}">{% trans "Mi Perfil" %}</a>
+                            <a href="{% url 'my_orders' %}">{% trans "Mis Pedidos" %}</a>
+                            <a href="{% url 'favorites' %}">{% trans "Favoritos" %}</a>
+                            <a href="{% url 'addresses' %}">{% trans "Direcciones" %}</a>
                             {% if user.is_staff %}
-                                <a href="{% url 'admin_dashboard' %}">Panel de Administración</a>
+                                <a href="{% url 'admin_dashboard' %}">{% trans "Panel de Administración" %}</a>
                             {% endif %}
                             <form method="post" action="{% url 'logout' %}" class="logout-form">
                                 {% csrf_token %}
-                                <button type="submit" class="profile-menu-item">Cerrar Sesión</button>
+                                <button type="submit" class="profile-menu-item">{% trans "Cerrar Sesión" %}</button>
                             </form>
                         {% else %}
-                            <a href="{% url 'login' %}">Iniciar Sesión</a>
-                            <a href="{% url 'register' %}">Registrarse</a>
+                            <a href="{% url 'login' %}">{% trans "Iniciar Sesión" %}</a>
+                            <a href="{% url 'register' %}">{% trans "Registrarse" %}</a>
                         {% endif %}
+                        <form action="{% url 'set_language' %}" method="post" class="language-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="next" value="{{ request.path }}">
+                            <div class="language-selector-container">
+                                <button type="button" class="language-selector-button" onclick="toggleLanguageDropdown()">
+                                    {% if LANGUAGE_CODE == 'es' %}Español{% else %}English{% endif %}
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+                                <div id="languageDropdown" class="language-dropdown" style="display: none;">
+                                    <div class="language-option {% if LANGUAGE_CODE == 'es' %}active{% endif %}" 
+                                        onclick="changeLanguage('es')">
+                                        Español
+                                    </div>
+                                    <div class="language-option {% if LANGUAGE_CODE == 'en' %}active{% endif %}" 
+                                        onclick="changeLanguage('en')">
+                                        English
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="hidden" id="languageInput" name="language" value="{{ LANGUAGE_CODE }}">
+                        </form>
                     </div>
                 </div>
                 
@@ -109,26 +132,26 @@
         </div>
         <div class="mobile-menu-content">
             <nav class="mobile-nav">
-                <a href="{% url 'home' %}" class="nav-link">Inicio</a>
-                <a href="{% url 'products' %}" class="nav-link">Productos</a>
-                <a href="#" class="nav-link">Hombre</a>
-                <a href="#" class="nav-link">Mujer</a>
-                <a href="#" class="nav-link">Accesorios</a>
+                <a href="{% url 'home' %}" class="nav-link">{% trans "Inicio" %}</a>
+                <a href="{% url 'products' %}" class="nav-link">{% trans "Productos" %}</a>
+                <a href="#" class="nav-link">{% trans "Hombre" %}</a>
+                <a href="#" class="nav-link">{% trans "Mujer" %}</a>
+                <a href="#" class="nav-link">{% trans "Accesorios" %}</a>
             </nav>
             
             <div class="mobile-user-menu">
                 {% if user.is_authenticated %}
-                    <a href="{% url 'profile' %}" class="nav-link">Mi Perfil</a>
-                    <a href="{% url 'my_orders' %}" class="nav-link">Mis Pedidos</a>
-                    <a href="{% url 'favorites' %}" class="nav-link">Favoritos</a>
-                    <a href="{% url 'addresses' %}" class="nav-link">Direcciones</a>
+                    <a href="{% url 'profile' %}" class="nav-link">{% trans "Mi Perfil" %}</a>
+                    <a href="{% url 'my_orders' %}" class="nav-link">{% trans "Mis Pedidos" %}</a>
+                    <a href="{% url 'favorites' %}" class="nav-link">{% trans "Favoritos" %}</a>
+                    <a href="{% url 'addresses' %}" class="nav-link">{% trans "Direcciones" %}</a>
                     {% if user.is_staff %}
-                        <a href="{% url 'admin_dashboard' %}" class="nav-link">Panel de Administración</a>
+                        <a href="{% url 'admin_dashboard' %}" class="nav-link">{% trans "Panel de Administración" %}</a>
                     {% endif %}
-                    <a href="{% url 'logout' %}" class="nav-link">Cerrar Sesión</a>
+                    <a href="{% url 'logout' %}" class="nav-link">{% trans "Cerrar Sesión" %}</a>
                 {% else %}
-                    <a href="{% url 'login' %}" class="nav-link">Iniciar Sesión</a>
-                    <a href="{% url 'register' %}" class="nav-link">Registrarse</a>
+                    <a href="{% url 'login' %}" class="nav-link">{% trans "Iniciar Sesión" %}</a>
+                    <a href="{% url 'register' %}" class="nav-link">{% trans "Registrarse" %}</a>
                 {% endif %}
             </div>
         </div>
@@ -146,7 +169,7 @@
                 <div class="footer-column">
                     <h3 class="footer-title">PRESTIGE</h3>
                     <p class="footer-text">
-                        Ropa de lujo para quienes aprecian la calidad excepcional y la elegancia atemporal.
+                        {% trans "Ropa de lujo para quienes aprecian la calidad excepcional y la elegancia atemporal." %}
                     </p>
                     <div class="social-links">
                         <a href="#" class="social-link">
@@ -164,43 +187,43 @@
                     </div>
                 </div>
                 <div class="footer-column">
-                    <h3 class="footer-heading">Tienda</h3>
+                    <h3 class="footer-heading">{% trans "Tienda" %}</h3>
                     <ul class="footer-links">
-                        <li><a href="#" class="footer-link">Novedades</a></li>
-                        <li><a href="#" class="footer-link">Mujer</a></li>
-                        <li><a href="#" class="footer-link">Hombre</a></li>
-                        <li><a href="#" class="footer-link">Accesorios</a></li>
-                        <li><a href="#" class="footer-link">Ofertas</a></li>
+                        <li><a href="#" class="footer-link">{% trans "Novedades" %}</a></li>
+                        <li><a href="#" class="footer-link">{% trans "Mujer" %}</a></li>
+                        <li><a href="#" class="footer-link">{% trans "Hombre" %}</a></li>
+                        <li><a href="#" class="footer-link">{% trans "Accesorios" %}</a></li>
+                        <li><a href="#" class="footer-link">{% trans "Ofertas" %}</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
-                    <h3 class="footer-heading">Empresa</h3>
+                    <h3 class="footer-heading">{% trans "Empresa" %}</h3>
                     <ul class="footer-links">
-                        <li><a href="#" class="footer-link">Nuestra Historia</a></li>
-                        <li><a href="#" class="footer-link">Empleo</a></li>
-                        <li><a href="#" class="footer-link">Responsabilidad Corporativa</a></li>
-                        <li><a href="#" class="footer-link">Prensa</a></li>
+                        <li><a href="#" class="footer-link">{% trans "Nuestra Historia" %}</a></li>
+                        <li><a href="#" class="footer-link">{% trans "Empleo" %}</a></li>
+                        <li><a href="#" class="footer-link">{% trans "Responsabilidad Corporativa" %}</a></li>
+                        <li><a href="#" class="footer-link">{% trans "Prensa" %}</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
-                    <h3 class="footer-heading">Atención al Cliente</h3>
+                    <h3 class="footer-heading">{% trans "Atención al Cliente" %}</h3>
                     <ul class="footer-links">
-                        <li><a href="#" class="footer-link">Contáctanos</a></li>
-                        <li><a href="#" class="footer-link">Envíos y Devoluciones</a></li>
-                        <li><a href="#" class="footer-link">Preguntas Frecuentes</a></li>
-                        <li><a href="#" class="footer-link">Guía de Tallas</a></li>
-                        <li><a href="#" class="footer-link">Localizador de Tiendas</a></li>
+                        <li><a href="#" class="footer-link">{% trans "Contáctanos" %}</a></li>
+                        <li><a href="#" class="footer-link">{% trans "Envíos y Devoluciones" %}</a></li>
+                        <li><a href="#" class="footer-link">{% trans "Preguntas Frecuentes" %}</a></li>
+                        <li><a href="#" class="footer-link">{% trans "Guía de Tallas" %}</a></li>
+                        <li><a href="#" class="footer-link">{% trans "Localizador de Tiendas" %}</a></li>
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
                 <p class="copyright">
-                    &copy; {% now "Y" %} Prestige Ropa de Lujo. Todos los derechos reservados.
+                    &copy; {% now "Y" %} {% trans "Prestige Ropa de Lujo. Todos los derechos reservados." %}
                 </p>
                 <div class="legal-links">
-                    <a href="#" class="legal-link">Política de Privacidad</a>
-                    <a href="#" class="legal-link">Términos de Servicio</a>
-                    <a href="#" class="legal-link">Accesibilidad</a>
+                    <a href="#" class="legal-link">{% trans "Política de Privacidad" %}</a>
+                    <a href="#" class="legal-link">{% trans "Términos de Servicio" %}</a>
+                    <a href="#" class="legal-link">{% trans "Accesibilidad" %}</a>
                 </div>
             </div>
         </div>

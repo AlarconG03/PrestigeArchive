@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .models import Address, Newsletter
 from django.contrib.auth import get_user_model
+from django.utils.translation import gettext_lazy as _
 User = get_user_model()
 
 class UserRegisterForm(UserCreationForm):
@@ -65,5 +66,5 @@ class NewsletterForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['email'].widget.attrs.update({
             'class': 'newsletter-input',
-            'placeholder': 'Tu dirección de email'
+            'placeholder': _('Tu dirección de email')
         })

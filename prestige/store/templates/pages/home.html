@@ -1,6 +1,7 @@
 <!-- templates/pages/home.html -->
 {% extends 'pages/base.html' %}
 {% load static %}
+{% load i18n %}
 
 {% block title %}{{ titulo_pagina }}{% endblock %}
 
@@ -11,14 +12,14 @@
     <div class="hero-overlay"></div>
     <div class="hero-content container">
         <h1 class="hero-title">
-            Eleva Tu Estilo con <span class="highlight">Prestige</span>
+            {% trans "Eleva Tu Estilo con " %}<span class="highlight">Prestige</span>
         </h1>
         <p class="hero-subtitle">
-            Descubre nuestra exclusiva colección de ropa de lujo diseñada para quienes aprecian la calidad excepcional y la elegancia atemporal.
+            {% trans "Descubre nuestra exclusiva colección de ropa de lujo diseñada para quienes aprecian la calidad excepcional y la elegancia atemporal." %}
         </p>
         <div class="hero-buttons">
-            <a href="#" class="btn btn-primary">Comprar Novedades</a>
-            <a href="#" class="btn btn-outline">Explorar Colecciones</a>
+            <a href="#" class="btn btn-primary">{% trans "Comprar Novedades" %}</a>
+            <a href="#" class="btn btn-outline">{% trans "Explorar Colecciones" %}</a>
         </div>
     </div>
 </section>
@@ -27,10 +28,10 @@
 <section class="featured-products">
     <div class="container">
         <div class="section-header">
-            <h2 class="section-title">Productos Destacados</h2>
+            <h2 class="section-title">{% trans "Productos Destacados" %}</h2>
             <div class="title-separator"></div>
             <p class="section-subtitle">
-                Descubre nuestra selección de piezas de lujo que definen la elegancia y la sofisticación.
+                {% trans "Descubre nuestra selección de piezas de lujo que definen la elegancia y la sofisticación." %}
             </p>
         </div>
         <div class="products-grid">
@@ -45,7 +46,7 @@
                     <div class="product-overlay">
                         <button class="btn btn-add-cart">
                             <i class="fas fa-shopping-bag"></i>
-                            Añadir al Carrito
+                            {% trans "Añadir al Carrito" %}
                         </button>
                     </div>
                 </div>
@@ -55,7 +56,7 @@
             {% endfor %}
         </div>
         <div class="view-all">
-            <a href="{% url 'products' %}" class="btn btn-outline">Ver Todos los Productos</a>
+            <a href="{% url 'products' %}" class="btn btn-outline">{% trans "Ver Todos los Productos" %}</a>
         </div>
     </div>
 </section>
@@ -64,10 +65,10 @@
 <section class="categories">
     <div class="container">
         <div class="section-header">
-            <h2 class="section-title">Comprar por Categoría</h2>
+            <h2 class="section-title">{% trans "Comprar por Categoría" %}</h2>
             <div class="title-separator"></div>
             <p class="section-subtitle">
-                Explora nuestras colecciones diseñadas para el conocedor moderno del lujo.
+                {% trans "Explora nuestras colecciones diseñadas para el conocedor moderno de lujo." %}
             </p>
         </div>
         <div class="categories-grid">
@@ -82,7 +83,7 @@
                     <div class="category-overlay"></div>
                     <div class="category-content">
                         <h3 class="category-title">{{ categoria.nombre }}</h3>
-                        <span class="category-link">Explorar Colección</span>
+                        <span class="category-link">{% trans "Explorar Colección" %}</span>
                     </div>
                 </div>
             </a>
@@ -96,14 +97,14 @@
     <div class="container">
         <div class="newsletter-container">
             <div class="newsletter-header">
-                <h2 class="newsletter-title">Suscríbete a nuestro Newsletter</h2>
-                <p class="newsletter-subtitle">Recibe las últimas novedades, ofertas exclusivas y contenido personalizado directamente en tu bandeja de entrada.</p>
+                <h2 class="newsletter-title">{% trans "Suscríbete a nuestro Newsletter" %}</h2>
+                <p class="newsletter-subtitle">{% trans "Recibe las últimas novedades, ofertas exclusivas y contenido personalizado directamente en tu bandeja de entrada." %}</p>
             </div>
             
             <form method="post" action="{% url 'newsletter_subscribe' %}" class="newsletter-form">
                 {% csrf_token %}
                 {{ newsletter_form.email }}
-                <button type="submit" class="btn btn-primary">Suscribirse</button>
+                <button type="submit" class="btn btn-primary">{% trans "Suscribirse" %}</button>
             </form>
         </div>
     </div>
