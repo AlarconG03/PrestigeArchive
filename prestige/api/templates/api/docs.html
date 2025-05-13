@@ -1,0 +1,75 @@
+{% extends "pages/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "API Documentation - Prestige" %}{% endblock %}
+
+{% block content %}
+<div class="container py-8">
+    <h1 class="text-3xl font-bold mb-6">{% trans "API Documentation" %}</h1>
+    
+    <div class="bg-gray-100 p-6 rounded-lg mb-8">
+        <h2 class="text-2xl font-bold mb-4">{% trans "Overview" %}</h2>
+        <p class="mb-4">
+            {% trans "The Prestige API provides programmatic access to product information. You can use this API to retrieve information about our products, including availability, pricing, and direct links to product pages." %}
+        </p>
+        <p>
+            {% trans "All API responses are returned in JSON format." %}
+        </p>
+    </div>
+    
+    <div class="mb-8">
+        <h2 class="text-2xl font-bold mb-4">{% trans "Base URL" %}</h2>
+        <div class="bg-gray-800 text-white p-4 rounded font-mono">
+            {{ request.scheme }}://{{ request.get_host }}/api/
+        </div>
+    </div>
+    
+    <div class="mb-8">
+        <h2 class="text-2xl font-bold mb-4">{% trans "Endpoints" %}</h2>
+        
+        <div class="border-b pb-6 mb-6">
+            <h3 class="text-xl font-bold mb-2">{% trans "List All Products" %}</h3>
+            <p class="mb-2"><strong>GET</strong> /api/products/</p>
+            <p class="mb-4">{% trans "Returns a paginated list of all products." %}</p>
+            
+            <h4 class="font-bold mb-2">{% trans "Query Parameters" %}:</h4>
+            <ul class="list-disc pl-6 mb-4">
+                <li><code>search</code> - {% trans "Search in product name and description" %}</li>
+                <li><code>in_stock</code> - {% trans "Set to 'true' to show only products in stock" %}</li>
+            </ul>
+            
+            <h4 class="font-bold mb-2">{% trans "Example Response" %}:</h4>
+            <pre class="bg-gray-800 text-white p-4 rounded font-mono overflow-x-auto">
+{
+  "count": 42,
+  "next": "{{ request.scheme }}://{{ request.get_host }}/api/products/?page=2",
+  "previous": null,
+  "results": [
+    {
+      "id": 1,
+      "name": "Camisa de Seda Premium",
+      "description": "Elegante camisa de seda de la más alta calidad.",
+      "price": "129.99",
+      "stock": 15,
+      "image": "{{ request.scheme }}://{{ request.get_host }}/media/products/camisa-seda.jpg",
+      "product_page": "{{ request.scheme }}://{{ request.get_host }}/products/1/"
+    }
+  ]
+}
+            </pre>
+        </div>
+        
+        <div class="border-b pb-6 mb-6">
+            <h3 class="text-xl font-bold mb-2">{% trans "Products In Stock" %}</h3>
+            <p class="mb-2"><strong>GET</strong> /api/products-in-stock/</p>
+            <p class="mb-4">{% trans "Returns a list of all products currently in stock." %}</p>
+        </div>
+        
+        <div>
+            <h3 class="text-xl font-bold mb-2">{% trans "Product Details" %}</h3>
+            <p class="mb-2"><strong>GET</strong> /api/products/{id}/</p>
+            <p class="mb-4">{% trans "Returns detailed information about a specific product." %}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
