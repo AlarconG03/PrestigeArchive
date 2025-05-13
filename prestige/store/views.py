@@ -776,13 +776,10 @@ class AdminUserListView(LoginRequiredMixin, StaffRequiredMixin, ListView):
     paginate_by = 20
     ordering = ['-date_joined']
 
-# Añade esta vista al final del archivo views.py
 class WeatherSearchView(View):
     def post(self, request, *args, **kwargs):
         city = request.POST.get('city', 'Medellin')
         
-        # Guardar la ciudad en la sesión
         request.session['weather_city'] = city
         
-        # Redirigir a la página anterior
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', reverse('home')))

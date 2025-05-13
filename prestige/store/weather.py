@@ -3,16 +3,12 @@ import os
 from django.conf import settings
 
 def get_weather(city="Medellin"):
-    """
-    Obtiene la información del clima para una ciudad específica.
-    Por defecto, usa Buenos Aires si no se especifica una ciudad.
-    """
     api_key = settings.WEATHER_API_KEY
     url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric&lang=es"
     
     try:
         response = requests.get(url)
-        response.raise_for_status()  # Lanza una excepción si hay un error HTTP
+        response.raise_for_status()
         
         data = response.json()
         weather_info = {

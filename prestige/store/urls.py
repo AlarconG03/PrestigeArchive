@@ -10,6 +10,9 @@ urlpatterns = [
     path('products/<int:pk>/', views.ProductDetailView.as_view(), name='product_detail'),
     path('search/', views.SearchView.as_view(), name='search'),
     
+    #API clima
+    path('weather/search/', views.WeatherSearchView.as_view(), name='weather_search'),
+
     # Autenticación (auth)
     path('login/', views.CustomLoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
@@ -58,5 +61,4 @@ urlpatterns = [
     path('admin/orders/', views.AdminOrderListView.as_view(), name='admin_orders'),
     path('admin/orders/<int:order_id>/', views.AdminOrderDetailView.as_view(), name='admin_order_detail'),
     path('admin/users/', views.AdminUserListView.as_view(), name='admin_users'),
-    path('weather/search/', views.WeatherSearchView.as_view(), name='weather_search'),
 ]
