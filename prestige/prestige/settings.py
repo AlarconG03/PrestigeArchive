@@ -56,16 +56,9 @@ ROOT_URLCONF = 'prestige.urls'
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-<<<<<<< HEAD
-        'DIRS': [os.path.join(BASE_DIR, 'store', 'templates')],
-=======
-        'DIRS': [
-            # Django encuentre las plantillas en store
-            os.path.join(BASE_DIR, 'store', 'templates'),
-        ],
->>>>>>> aafefea254925a1d1f7978c2a4dae283615f51d2
-        'APP_DIRS': True,
+'BACKEND': 'django.template.backends.django.DjangoTemplates',
+'DIRS': [os.path.join(BASE_DIR, 'store', 'templates')],
+'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -160,18 +153,11 @@ LOCALE_PATHS = [
     BASE_DIR / 'locale',
 ]
 
-<<<<<<< HEAD
-=======
 # Configuración de Django Rest Framework
->>>>>>> aafefea254925a1d1f7978c2a4dae283615f51d2
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> aafefea254925a1d1f7978c2a4dae283615f51d2
