@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib.auth.views import LogoutView
-from .views import CartClearView
+from .views import CartClearView, ReportDownloadView
 from . import views
 
 urlpatterns = [
@@ -61,4 +61,7 @@ urlpatterns = [
     path('admin/orders/', views.AdminOrderListView.as_view(), name='admin_orders'),
     path('admin/orders/<int:order_id>/', views.AdminOrderDetailView.as_view(), name='admin_order_detail'),
     path('admin/users/', views.AdminUserListView.as_view(), name='admin_users'),
+    
+    # Ruta para descarga de PDF de productos
+    path('admin/products/download/pdf/', ReportDownloadView.as_view(), name='report_download_pdf'),
 ]

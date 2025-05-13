@@ -6,9 +6,15 @@
 {% block admin_content %}
 <div class="admin-header">
     <h1 class="admin-page-title">Productos</h1>
-    <a href="{% url 'admin_product_create' %}" class="btn btn-primary">
-        <i class="fas fa-plus"></i> Nuevo Producto
-    </a>
+    <div class="header-actions">
+        <a href="{% url 'admin_product_create' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Nuevo Producto
+        </a>
+        <!-- Botón de descarga PDF -->
+        <a href="{% url 'report_download_pdf' %}" class="btn btn-primary">
+            <i class="fas fa-file-pdf"></i> Descargar Reporte
+        </a>
+    </div>
 </div>
 
 <div class="admin-card">

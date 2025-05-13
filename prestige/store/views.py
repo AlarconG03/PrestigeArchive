@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.views import LoginView, PasswordChangeView
 from django.urls import reverse_lazy, reverse
 from django.shortcuts import redirect, get_object_or_404
-from django.http import JsonResponse, HttpResponseRedirect
+from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
 from django.contrib import messages
 from django.db.models import Count, Sum, Q, F
 from django.utils.decorators import method_decorator
@@ -18,6 +18,9 @@ from .models import Product, ShoppingCart, CartItem, Order, OrderItem, Payment, 
 from .forms import UserRegisterForm, UserLoginForm, UserUpdateForm, AddressForm, NewsletterForm
 from django.contrib.auth import get_user_model
 from .weather import get_weather
+from django.views import View
+from store.models import Product
+from store.services.report_generator import PDFReportGenerator
 User = get_user_model()
 
 # Vista de inicio
@@ -783,3 +786,10 @@ class WeatherSearchView(View):
         request.session['weather_city'] = city
         
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', reverse('home')))
+
+class ReportDownloadView(View):
+    """Vista para descargar el reporte en PDF de productos."""
+    def get(self, request, *args, **kwargs):
+        products = Product.objects.all().order_by('product_id')
+        generator = PDFReportGenerator()
+        return generator.generate(products)
