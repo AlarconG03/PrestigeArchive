@@ -24,6 +24,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+WEATHER_API_KEY = 'a30888b415759984c9123c79fdbd1997'
 
 # Application definition
 
@@ -61,6 +62,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'store.context_processors.weather_info',
             ],
         },
     },

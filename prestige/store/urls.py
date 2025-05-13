@@ -58,4 +58,5 @@ urlpatterns = [
     path('admin/orders/', views.AdminOrderListView.as_view(), name='admin_orders'),
     path('admin/orders/<int:order_id>/', views.AdminOrderDetailView.as_view(), name='admin_order_detail'),
     path('admin/users/', views.AdminUserListView.as_view(), name='admin_users'),
+    path('weather/search/', views.WeatherSearchView.as_view(), name='weather_search'),
 ]
