@@ -17,6 +17,7 @@ from django.utils.safestring import mark_safe
 from .models import Product, ShoppingCart, CartItem, Order, OrderItem, Payment, OrderStatus, Newsletter, Favorite, Address
 from .forms import UserRegisterForm, UserLoginForm, UserUpdateForm, AddressForm, NewsletterForm
 from django.contrib.auth import get_user_model
+from .weather import get_weather
 User = get_user_model()
 
 # Vista de inicio
@@ -774,3 +775,11 @@ class AdminUserListView(LoginRequiredMixin, StaffRequiredMixin, ListView):
     context_object_name = 'users'
     paginate_by = 20
     ordering = ['-date_joined']
+
+class WeatherSearchView(View):
+    def post(self, request, *args, **kwargs):
+        city = request.POST.get('city', 'Medellin')
+        
+        request.session['weather_city'] = city
+        
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', reverse('home')))

@@ -10,6 +10,9 @@ urlpatterns = [
     path('products/<int:pk>/', views.ProductDetailView.as_view(), name='product_detail'),
     path('search/', views.SearchView.as_view(), name='search'),
     
+    #API clima
+    path('weather/search/', views.WeatherSearchView.as_view(), name='weather_search'),
+
     # Autenticación (auth)
     path('login/', views.CustomLoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
