@@ -1,0 +1,17 @@
+.git
+.gitignore
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+db.sqlite3
+media/
+staticfiles/
