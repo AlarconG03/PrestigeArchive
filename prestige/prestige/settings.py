@@ -23,7 +23,7 @@ SECRET_KEY = 'django-insecure-z1rw44be^c^$^r8#85m8nk9f0k02)vsxezmzatu)w=xxj5##*t
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['3.92.234.228']
+ALLOWED_HOSTS = ['*']
 
 WEATHER_API_KEY = 'a30888b415759984c9123c79fdbd1997'
 
